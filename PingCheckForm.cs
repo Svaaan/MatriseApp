@@ -86,5 +86,25 @@ namespace Sp00ksy
                 return null;
             }
         }
+
+        private void labelResult_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void labelResult_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBoxIpAddress_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

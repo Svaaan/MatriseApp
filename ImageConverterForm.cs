@@ -73,5 +73,45 @@ namespace Sp00ksy
                 }
             }
         }
+
+        private void pictureBox_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ImageConverterForm_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void tableLayoutPanel_Paint_1(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void ImageConverterForm_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ImageConverterForm_Load_2(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonUpload_Click_1(object sender, EventArgs e)
+        {
+
+        }
     }
 }
