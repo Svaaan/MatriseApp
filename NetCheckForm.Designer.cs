@@ -1,4 +1,9 @@
-﻿namespace Sp00ksy
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+using System.Xml.Linq;
+
+namespace Sp00ksy
 {
     partial class NetCheckForm
     {
@@ -34,6 +39,8 @@
             uploadSpeedLabel = new Label();
             downloadProgressBar = new ProgressBar();
             uploadProgressBar = new ProgressBar();
+            numberOfTestsUpDown = new NumericUpDown(); // Add NumericUpDown control
+            ((System.ComponentModel.ISupportInitialize)numberOfTestsUpDown).BeginInit();
             SuspendLayout();
             // 
             // speedTestButton
@@ -88,6 +95,16 @@
             uploadProgressBar.Size = new Size(400, 23);
             uploadProgressBar.TabIndex = 4;
             // 
+            // numberOfTestsUpDown
+            // 
+            numberOfTestsUpDown.Location = new Point(447, 360); // Position below the button
+            numberOfTestsUpDown.Minimum = 1;
+            numberOfTestsUpDown.Maximum = 10;
+            numberOfTestsUpDown.Value = 1;
+            numberOfTestsUpDown.Name = "numberOfTestsUpDown";
+            numberOfTestsUpDown.Size = new Size(120, 20);
+            numberOfTestsUpDown.TabIndex = 5;
+            // 
             // NetCheckForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -96,6 +113,7 @@
             BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1025, 487);
+            Controls.Add(numberOfTestsUpDown); // Add NumericUpDown to the form
             Controls.Add(speedTestButton);
             Controls.Add(downloadSpeedLabel);
             Controls.Add(uploadSpeedLabel);
@@ -103,6 +121,7 @@
             Controls.Add(uploadProgressBar);
             Name = "NetCheckForm";
             Text = "Network Speed Test";
+            ((System.ComponentModel.ISupportInitialize)numberOfTestsUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -114,5 +133,6 @@
         private Label uploadSpeedLabel;
         private ProgressBar downloadProgressBar;
         private ProgressBar uploadProgressBar;
+        private NumericUpDown numberOfTestsUpDown; // Declare NumericUpDown control
     }
 }
