@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Net.Http;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -8,12 +8,10 @@ namespace Sp00ksy
 {
     public partial class NetCheckForm : Form
     {
-        private const double MaxSpeed = 100; // Maximum expected speed in Mbps for scaling progress bars
-
         public NetCheckForm()
         {
             InitializeComponent();
-            speedTestButton.Text = "Check Download Speed"; // Set button text
+            speedTestButton.Text = "Check Network Speed"; // Set button text
             speedTestButton.Click += SpeedTestButton_Click; // Add click event for the button
         }
 
@@ -21,42 +19,61 @@ namespace Sp00ksy
         {
             try
             {
-                double downloadSpeed = await MeasureDownloadSpeedAsync();
-                MessageBox.Show($"Download Speed: {downloadSpeed:F2} Mbps", "Speed Test Result", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                speedTestButton.Enabled = false; // Disable button to prevent multiple clicks
+                downloadSpeedLabel.Text = "Measuring download speed...";
+                uploadSpeedLabel.Text = "Measuring upload speed...";
+                downloadProgressBar.Value = 0;
+                uploadProgressBar.Value = 0;
+
+                var speeds = await MeasureNetworkSpeedsAsync();
+
+                downloadSpeedLabel.Text = $"Download Speed: {speeds.downloadSpeed:F2} Mbps";
+                uploadSpeedLabel.Text = $"Upload Speed: {speeds.uploadSpeed:F2} Mbps";
+                downloadProgressBar.Value = (int)Math.Min(speeds.downloadSpeed, 100); // Assuming progress bar max is 100
+                uploadProgressBar.Value = (int)Math.Min(speeds.uploadSpeed, 100);     // Assuming progress bar max is 100
+
+                speedTestButton.Enabled = true; // Re-enable the button
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error: {ex.Message}", "Speed Test Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                speedTestButton.Enabled = true; // Re-enable the button in case of error
             }
         }
 
-        private async Task<double> MeasureDownloadSpeedAsync()
+        private async Task<(double downloadSpeed, double uploadSpeed)> MeasureNetworkSpeedsAsync()
         {
-            // Endpoint provided by Fast.com for testing purposes
-            string testUrl = "https://speedtest.fast.com/api/v1/download?https=true&token=YOUR_TOKEN_HERE&urlCount=5"; // Replace with actual Fast.com endpoint if available
+            // Construct the path to speedtest.exe relative to the project's directory
+            string projectRootPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
+            string speedtestCliPath = Path.Combine(projectRootPath, "speedtest.exe");
 
-            using (HttpClient client = new HttpClient())
+            // Check if the file exists to avoid runtime errors
+            if (!File.Exists(speedtestCliPath))
             {
-                var stopwatch = Stopwatch.StartNew();
+                throw new FileNotFoundException("Speedtest executable not found.", speedtestCliPath);
+            }
 
-                HttpResponseMessage response = await client.GetAsync(testUrl, HttpCompletionOption.ResponseHeadersRead);
-                response.EnsureSuccessStatusCode();
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = speedtestCliPath,
+                Arguments = "--format=json", // Run the CLI with JSON output for easier parsing
+                RedirectStandardOutput = true,
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
 
-                var stream = await response.Content.ReadAsStreamAsync();
-                var buffer = new byte[8192];
-                long totalBytesRead = 0;
-                int bytesRead;
+            using (var process = new Process { StartInfo = startInfo })
+            {
+                process.Start();
+                string output = await process.StandardOutput.ReadToEndAsync();
+                process.WaitForExit();
 
-                while ((bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                {
-                    totalBytesRead += bytesRead;
-                }
+                // Parse the JSON output to extract download and upload speeds
+                var result = System.Text.Json.JsonDocument.Parse(output);
+                double downloadSpeedMbps = result.RootElement.GetProperty("download").GetProperty("bandwidth").GetDouble() * 8 / 1_000_000; // Convert from bytes/s to Mbps
+                double uploadSpeedMbps = result.RootElement.GetProperty("upload").GetProperty("bandwidth").GetDouble() * 8 / 1_000_000; // Convert from bytes/s to Mbps
 
-                stopwatch.Stop();
-                double downloadTimeInSeconds = stopwatch.Elapsed.TotalSeconds;
-                double downloadSpeedMbps = (totalBytesRead * 8) / (1024 * 1024) / downloadTimeInSeconds;
-
-                return downloadSpeedMbps;
+                return (downloadSpeedMbps, uploadSpeedMbps);
             }
         }
     }
