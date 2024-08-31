@@ -1,22 +1,217 @@
-﻿using System.Net;
+﻿using System;
+using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Sp00ksy
 {
     public partial class PlasmaChat : Form
     {
-        private RSAParameters privateKey;
-        private RSAParameters publicKey;
-        private RSAParameters partnerPublicKey;
+        private RSAEncryption rsaEncryption;
         private TcpClient client;
         private TcpListener server;
         private NetworkStream stream;
+        private readonly object streamLock = new object();
 
         public PlasmaChat()
         {
             InitializeComponent();
+            rsaEncryption = new RSAEncryption();
+        }
+
+        // Button Click to Start Server
+        private async void btnStartServer_Click(object sender, EventArgs e)
+        {
+            if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
+            {
+                LogMessage("Invalid port number.", "ERROR");
+                return;
+            }
+
+            try
+            {
+                server = new TcpListener(IPAddress.Any, port);
+                server.Start();
+                LogMessage("Server started. Waiting for connection...");
+                await Task.Run(ServerListenLoop);
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error starting server: {ex.Message}", "ERROR");
+            }
+        }
+
+        // Button Click to Connect to Server
+        private async void btnConnect_Click(object sender, EventArgs e)
+        {
+            string ipAddress = txtIPAddress.Text;
+            if (!IPAddress.TryParse(ipAddress, out _))
+            {
+                LogMessage("Invalid IP address.", "ERROR");
+                return;
+            }
+
+            if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
+            {
+                LogMessage("Invalid port number.", "ERROR");
+                return;
+            }
+
+            try
+            {
+                client = new TcpClient();
+                await client.ConnectAsync(ipAddress, port);
+                stream = client.GetStream();
+                LogMessage("Connected to server.");
+                await SendPublicKeyAsync();
+                await Task.Run(ClientReceiveLoop);
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error connecting to server: {ex.Message}", "ERROR");
+            }
+        }
+
+        private async Task SendPublicKeyAsync()
+        {
+            try
+            {
+                var publicKeyBytes = rsaEncryption.ConvertPublicKeyToBytes();
+                lock (streamLock)
+                {
+                    stream.Write(publicKeyBytes, 0, publicKeyBytes.Length);
+                }
+                await stream.FlushAsync();
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error sending public key: {ex.Message}", "ERROR");
+            }
+        }
+
+        private async Task ServerListenLoop()
+        {
+            while (true)
+            {
+                try
+                {
+                    using (var client = await server.AcceptTcpClientAsync())
+                    using (var stream = client.GetStream())
+                    {
+                        rsaEncryption.PartnerPublicKey = await ReceivePublicKeyAsync(stream);
+                        LogMessage("Client connected.");
+
+                        using (var sr = new StreamReader(stream))
+                        {
+                            string encryptedMessage;
+                            while ((encryptedMessage = await sr.ReadLineAsync()) != null)
+                            {
+                                var decryptedMessage = rsaEncryption.DecryptMessage(Convert.FromBase64String(encryptedMessage));
+                                LogMessage($"Client: {decryptedMessage}");
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    LogMessage($"Error in server loop: {ex.Message}", "ERROR");
+                }
+            }
+        }
+
+        private async Task ClientReceiveLoop()
+        {
+            try
+            {
+                rsaEncryption.PartnerPublicKey = await ReceivePublicKeyAsync(stream);
+
+                using (var sr = new StreamReader(stream))
+                {
+                    string encryptedMessage;
+                    while ((encryptedMessage = await sr.ReadLineAsync()) != null)
+                    {
+                        var decryptedMessage = rsaEncryption.DecryptMessage(Convert.FromBase64String(encryptedMessage));
+                        LogMessage($"Server: {decryptedMessage}");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error in client receive loop: {ex.Message}", "ERROR");
+            }
+        }
+
+        private async Task<RSAParameters> ReceivePublicKeyAsync(NetworkStream stream)
+        {
+            try
+            {
+                var publicKeyBytes = new byte[2048];
+                int bytesRead = await stream.ReadAsync(publicKeyBytes, 0, publicKeyBytes.Length);
+                return rsaEncryption.ConvertBytesToPublicKey(publicKeyBytes, bytesRead);
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error receiving public key: {ex.Message}", "ERROR");
+                return default;
+            }
+        }
+
+        // Button Click to Send Message
+        public async void btnSendMessage_Click(object sender, EventArgs e)
+        {
+            string message = txtMessage.Text;
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                LogMessage("Message cannot be empty.", "ERROR");
+                return;
+            }
+
+            try
+            {
+                var encryptedMessage = rsaEncryption.EncryptMessage(message);
+                using (var sw = new StreamWriter(stream) { AutoFlush = true })
+                {
+                    await sw.WriteLineAsync(Convert.ToBase64String(encryptedMessage));
+                }
+                LogMessage($"You: {message}");
+                txtMessage.Clear();
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error sending message: {ex.Message}", "ERROR");
+            }
+        }
+
+        private void LogMessage(string message, string level = "INFO")
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => LogMessage(message, level)));
+                return;
+            }
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            txtChatLog.AppendText($"[{timestamp}] [{level}] {message}{Environment.NewLine}");
+        }
+
+        private void PlasmaChat_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            client?.Close();
+            server?.Stop();
+        }
+    }
+
+    public class RSAEncryption
+    {
+        private RSAParameters privateKey;
+        private RSAParameters publicKey;
+        public RSAParameters PartnerPublicKey { get; set; }
+
+        public RSAEncryption()
+        {
             GenerateKeys();
         }
 
@@ -29,102 +224,16 @@ namespace Sp00ksy
             }
         }
 
-        // Button Click to Start Server
-        private void btnStartServer_Click(object sender, EventArgs e)
-        {
-            int port = int.Parse(txtPort.Text);
-            server = new TcpListener(IPAddress.Any, port);
-            server.Start();
-            ThreadPool.QueueUserWorkItem(ServerListenLoop);
-            LogMessage("Server started. Waiting for connection...");
-        }
-
-        // Button Click to Connect to Server
-        private void btnConnect_Click(object sender, EventArgs e)
-        {
-            string ipAddress = txtIPAddress.Text;
-            int port = int.Parse(txtPort.Text);
-            client = new TcpClient(ipAddress, port);
-            stream = client.GetStream();
-            ThreadPool.QueueUserWorkItem(ClientReceiveLoop);
-            SendPublicKey();
-            LogMessage("Connected to server.");
-        }
-
-        private void SendPublicKey()
-        {
-            var publicKeyBytes = ConvertPublicKeyToBytes(publicKey);
-            stream.Write(publicKeyBytes, 0, publicKeyBytes.Length);
-        }
-
-        private void ServerListenLoop(object state)
-        {
-            while (true)
-            {
-                using (var client = server.AcceptTcpClient())
-                {
-                    stream = client.GetStream();
-                    partnerPublicKey = ReceivePublicKey();
-
-                    // Keep listening for messages from the client
-                    using (var sr = new StreamReader(stream))
-                    {
-                        while (true)
-                        {
-                            var encryptedMessage = sr.ReadLine();
-                            if (encryptedMessage == null) break;
-                            var decryptedMessage = DecryptMessage(Convert.FromBase64String(encryptedMessage));
-                            LogMessage($"Client: {decryptedMessage}");
-                        }
-                    }
-                }
-            }
-        }
-
-        private void ClientReceiveLoop(object state)
-        {
-            partnerPublicKey = ReceivePublicKey();
-
-            using (var sr = new StreamReader(stream))
-            {
-                while (true)
-                {
-                    var encryptedMessage = sr.ReadLine();
-                    if (encryptedMessage == null) break;
-                    var decryptedMessage = DecryptMessage(Convert.FromBase64String(encryptedMessage));
-                    LogMessage($"Server: {decryptedMessage}");
-                }
-            }
-        }
-
-        private RSAParameters ReceivePublicKey()
-        {
-            var publicKeyBytes = new byte[2048];
-            int bytesRead = stream.Read(publicKeyBytes, 0, publicKeyBytes.Length);
-            return ConvertBytesToPublicKey(publicKeyBytes, bytesRead);
-        }
-
-        // Button Click to Send Message
-        private void btnSendMessage_Click(object sender, EventArgs e)
-        {
-            string message = txtMessage.Text;
-            var encryptedMessage = EncryptMessage(message, partnerPublicKey);
-            var sw = new StreamWriter(stream) { AutoFlush = true };
-            sw.WriteLine(Convert.ToBase64String(encryptedMessage));
-            LogMessage($"You: {message}");
-            txtMessage.Clear();
-        }
-
-        private byte[] EncryptMessage(string message, RSAParameters publicKey)
+        public byte[] EncryptMessage(string message)
         {
             using (var rsa = new RSACryptoServiceProvider())
             {
-                rsa.ImportParameters(publicKey);
+                rsa.ImportParameters(PartnerPublicKey);
                 return rsa.Encrypt(Encoding.UTF8.GetBytes(message), false);
             }
         }
 
-        private string DecryptMessage(byte[] encryptedMessage)
+        public string DecryptMessage(byte[] encryptedMessage)
         {
             using (var rsa = new RSACryptoServiceProvider())
             {
@@ -134,7 +243,7 @@ namespace Sp00ksy
             }
         }
 
-        private byte[] ConvertPublicKeyToBytes(RSAParameters publicKey)
+        public byte[] ConvertPublicKeyToBytes()
         {
             using (var ms = new MemoryStream())
             {
@@ -149,7 +258,7 @@ namespace Sp00ksy
             }
         }
 
-        private RSAParameters ConvertBytesToPublicKey(byte[] bytes, int length)
+        public RSAParameters ConvertBytesToPublicKey(byte[] bytes, int length)
         {
             using (var ms = new MemoryStream(bytes, 0, length))
             {
@@ -164,16 +273,6 @@ namespace Sp00ksy
                     return new RSAParameters { Modulus = modulus, Exponent = exponent };
                 }
             }
-        }
-
-        private void LogMessage(string message)
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(() => LogMessage(message)));
-                return;
-            }
-            txtChatLog.AppendText($"{message}{Environment.NewLine}");
         }
     }
 }
