@@ -19,24 +19,16 @@ namespace Sp00ksy
         private NetworkStream serverClientStream; // Stream for the server-initiated client
         private StreamWriter serverClientWriter;
         private readonly object streamLock = new object();
-        private Button btnShowPorts;
 
         public PlasmaChat()
         {
             InitializeComponent();
-            InitializeCustomComponents();
         }
 
-        private void InitializeCustomComponents()
+        private void ClearLogs()
         {
-            btnShowPorts = new Button
-            {
-                Text = "Show Open Ports",
-                Location = new Point(10, 10) // Adjust location as needed
-            };
-
-            btnShowPorts.Click += btnShowPorts_Click;
-            Controls.Add(btnShowPorts);
+            txtChatLog.Clear();
+            LogMessage("Logs cleared.", "INFO");
         }
 
         private async void btnStartServer_Click(object sender, EventArgs e)
@@ -168,15 +160,13 @@ namespace Sp00ksy
                 if (clientWriter != null)
                 {
                     await clientWriter.WriteLineAsync(message);
-                    LogMessage($"You: {message}");
-                    LogMessage("Client sent message.");
+                    LogMessage($"You: {message}"); // Keep this log to show the message was sent
                     txtMessage.Clear();
                 }
                 else if (serverClientWriter != null)
                 {
                     await serverClientWriter.WriteLineAsync(message);
-                    LogMessage($"You (Server Client): {message}");
-                    LogMessage("Server client sent message.");
+                    LogMessage($"You (Server Client): {message}"); // Keep this log to show the message was sent
                     txtMessage.Clear();
                 }
                 else
@@ -247,6 +237,32 @@ namespace Sp00ksy
             {
                 MessageBox.Show($"Error executing netstat: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void btnSaveLogs_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+                {
+                    saveFileDialog.Filter = "Text Files (*.txt)|*.txt";
+                    saveFileDialog.Title = "Save Logs";
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                    {
+                        File.WriteAllText(saveFileDialog.FileName, txtChatLog.Text);
+                        LogMessage("Logs saved successfully.", "INFO");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error saving logs: {ex.Message}", "ERROR");
+            }
+        }
+
+        private void btnClearLogs_Click(object sender, EventArgs e)
+        {
+            ClearLogs();
         }
     }
 }
