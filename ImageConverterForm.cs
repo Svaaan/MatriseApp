@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using ImageMagick;
 
@@ -31,11 +32,18 @@ namespace Sp00ksy
 
                         var settings = new MagickReadSettings
                         {
+                            // Load the image with the original size
                             Width = 1024,
                             Height = 1024
                         };
 
                         uploadedImage = new MagickImage(filePath, settings);
+
+                        // Resize to a reasonable preview size
+                        uploadedImage.Resize(new MagickGeometry(256, 256)
+                        {
+                            IgnoreAspectRatio = false
+                        });
 
                         // Convert to Bitmap for preview
                         Bitmap bitmap = uploadedImage.ToBitmap();
@@ -63,15 +71,45 @@ namespace Sp00ksy
 
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                // Allow saving in PNG, JPEG, and WebP formats
-                saveFileDialog.Filter = "PNG Image|*.png|JPEG Image|*.jpg|WebP Image|*.webp";
+                // Allow saving in PNG, JPEG, WebP, and ICO formats
+                saveFileDialog.Filter = "PNG Image|*.png|JPEG Image|*.jpg|WebP Image|*.webp|ICO Image|*.ico";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string savePath = saveFileDialog.FileName;
-                    uploadedImage.Write(savePath); // Save the image in the selected format
+
+                    // Check if the selected format is ICO
+                    if (Path.GetExtension(savePath).ToLower() == ".ico")
+                    {
+                        // Save as ICO format
+                        using (var iconCollection = new MagickImageCollection())
+                        {
+                            // Add various sizes to the icon collection
+                            AddImageToIconCollection(uploadedImage, iconCollection, 16);
+                            AddImageToIconCollection(uploadedImage, iconCollection, 32);
+                            AddImageToIconCollection(uploadedImage, iconCollection, 48);
+                            AddImageToIconCollection(uploadedImage, iconCollection, 64);
+                            AddImageToIconCollection(uploadedImage, iconCollection, 128);
+
+                            // Write the collection to ICO file
+                            iconCollection.Write(savePath);
+                        }
+                    }
+                    else
+                    {
+                        // Save in selected format
+                        uploadedImage.Write(savePath);
+                    }
+
                     MessageBox.Show("Image converted and saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+        }
+
+        private void AddImageToIconCollection(MagickImage sourceImage, MagickImageCollection iconCollection, int size)
+        {
+            var iconImage = sourceImage.Clone();
+            iconImage.Resize(size, size); // Resize to the desired icon size
+            iconCollection.Add(iconImage);
         }
 
         private void pictureBox_Click(object sender, EventArgs e)
