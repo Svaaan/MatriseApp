@@ -36,6 +36,7 @@
             this.btnStartServer = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
             this.btnSendMessage = new System.Windows.Forms.Button();
+            this.btnShowPorts = new System.Windows.Forms.Button(); // New button
             this.labelIP = new System.Windows.Forms.Label();
             this.labelPort = new System.Windows.Forms.Label();
             this.SuspendLayout();
@@ -112,13 +113,24 @@
             this.btnSendMessage.Click += new System.EventHandler(this.btnSendMessage_Click);
 
             // 
+            // btnShowPorts
+            // 
+            this.btnShowPorts.Location = new System.Drawing.Point(360, 320); // Positioned to the right of btnStartServer
+            this.btnShowPorts.Name = "btnShowPorts";
+            this.btnShowPorts.Size = new System.Drawing.Size(100, 23);
+            this.btnShowPorts.TabIndex = 7;
+            this.btnShowPorts.Text = "Show Open Ports";
+            this.btnShowPorts.UseVisualStyleBackColor = true;
+            this.btnShowPorts.Click += new System.EventHandler(this.btnShowPorts_Click);
+
+            // 
             // labelIP
             // 
             this.labelIP.AutoSize = true;
             this.labelIP.Location = new System.Drawing.Point(12, 323);
             this.labelIP.Name = "labelIP";
             this.labelIP.Size = new System.Drawing.Size(58, 13);
-            this.labelIP.TabIndex = 7;
+            this.labelIP.TabIndex = 8;
             this.labelIP.Text = "IP Address";
 
             // 
@@ -128,7 +140,7 @@
             this.labelPort.Location = new System.Drawing.Point(12, 353);
             this.labelPort.Name = "labelPort";
             this.labelPort.Size = new System.Drawing.Size(26, 13);
-            this.labelPort.TabIndex = 8;
+            this.labelPort.TabIndex = 9;
             this.labelPort.Text = "Port";
 
             // 
@@ -140,6 +152,7 @@
             this.ClientSize = new System.Drawing.Size(624, 411);
             this.Controls.Add(this.labelPort);
             this.Controls.Add(this.labelIP);
+            this.Controls.Add(this.btnShowPorts); // Add new button here
             this.Controls.Add(this.btnSendMessage);
             this.Controls.Add(this.btnConnect);
             this.Controls.Add(this.btnStartServer);

@@ -11,16 +11,25 @@ namespace Sp00ksy
 {
     public partial class PlasmaChat : Form
     {
-        private RSAEncryption rsaEncryption;
+        private EncryptionHelper encryptionHelper;
         private TcpClient client;
         private TcpListener server;
         private NetworkStream stream;
         private readonly object streamLock = new object();
+        private Button btnShowPorts;
 
         public PlasmaChat()
         {
             InitializeComponent();
-            rsaEncryption = new RSAEncryption();
+            encryptionHelper = new EncryptionHelper();
+            InitializeCustomComponents();
+        }
+
+        private void InitializeCustomComponents()
+        {
+            
+            btnShowPorts.Click += btnShowPorts_Click;
+            Controls.Add(btnShowPorts);
         }
 
         // Button Click to Start Server
@@ -80,11 +89,8 @@ namespace Sp00ksy
         {
             try
             {
-                var publicKeyBytes = rsaEncryption.ConvertPublicKeyToBytes();
-                lock (streamLock)
-                {
-                    stream.Write(publicKeyBytes, 0, publicKeyBytes.Length);
-                }
+                var publicKeyBytes = encryptionHelper.GetPublicKey();
+                await stream.WriteAsync(publicKeyBytes, 0, publicKeyBytes.Length);
                 await stream.FlushAsync();
             }
             catch (Exception ex)
@@ -102,18 +108,29 @@ namespace Sp00ksy
                     using (var client = await server.AcceptTcpClientAsync())
                     using (var stream = client.GetStream())
                     {
-                        rsaEncryption.PartnerPublicKey = await ReceivePublicKeyAsync(stream);
-                        LogMessage("Client connected.");
-
-                        using (var sr = new StreamReader(stream))
+                        byte[] publicKeyBytes = new byte[64]; // Adjust size if necessary
+                        int bytesRead = await stream.ReadAsync(publicKeyBytes, 0, publicKeyBytes.Length);
+                        if (bytesRead > 0)
                         {
-                            string encryptedMessage;
-                            while ((encryptedMessage = await sr.ReadLineAsync()) != null)
+                            encryptionHelper.SetPartnerPublicKey(publicKeyBytes.Take(bytesRead).ToArray());
+                            LogMessage("Client connected successfully."); // Indicate client connection
+
+                            using (var sr = new StreamReader(stream))
                             {
-                                var decryptedMessage = rsaEncryption.DecryptMessage(Convert.FromBase64String(encryptedMessage));
-                                LogMessage($"Client: {decryptedMessage}");
+                                string encryptedMessage;
+                                while ((encryptedMessage = await sr.ReadLineAsync()) != null)
+                                {
+                                    var decryptedMessage = encryptionHelper.DecryptMessage(Convert.FromBase64String(encryptedMessage));
+                                    LogMessage($"Client: {decryptedMessage}");
+                                }
                             }
                         }
+                        else
+                        {
+                            LogMessage("No data received from client.", "ERROR");
+                        }
+
+                        LogMessage("Client disconnected."); // Indicate client disconnection
                     }
                 }
                 catch (Exception ex)
@@ -127,36 +144,37 @@ namespace Sp00ksy
         {
             try
             {
-                rsaEncryption.PartnerPublicKey = await ReceivePublicKeyAsync(stream);
-
-                using (var sr = new StreamReader(stream))
+                byte[] publicKeyBytes = new byte[64]; // Adjust size if necessary
+                int bytesRead = await stream.ReadAsync(publicKeyBytes, 0, publicKeyBytes.Length);
+                if (bytesRead > 0)
                 {
-                    string encryptedMessage;
-                    while ((encryptedMessage = await sr.ReadLineAsync()) != null)
+                    encryptionHelper.SetPartnerPublicKey(publicKeyBytes.Take(bytesRead).ToArray());
+                    LogMessage("Connected to server successfully."); // Indicate server connection acknowledgment
+
+                    using (var sr = new StreamReader(stream))
                     {
-                        var decryptedMessage = rsaEncryption.DecryptMessage(Convert.FromBase64String(encryptedMessage));
-                        LogMessage($"Server: {decryptedMessage}");
+                        string encryptedMessage;
+                        while (stream.CanRead && (encryptedMessage = await sr.ReadLineAsync()) != null)
+                        {
+                            var decryptedMessage = encryptionHelper.DecryptMessage(Convert.FromBase64String(encryptedMessage));
+                            LogMessage($"Server: {decryptedMessage}");
+                        }
                     }
                 }
+                else
+                {
+                    LogMessage("No data received from server.", "ERROR");
+                }
+
+                LogMessage("Disconnected from server."); // Indicate client disconnection
+            }
+            catch (IOException ex)
+            {
+                LogMessage($"I/O error in client receive loop: {ex.Message}", "ERROR");
             }
             catch (Exception ex)
             {
                 LogMessage($"Error in client receive loop: {ex.Message}", "ERROR");
-            }
-        }
-
-        private async Task<RSAParameters> ReceivePublicKeyAsync(NetworkStream stream)
-        {
-            try
-            {
-                var publicKeyBytes = new byte[2048];
-                int bytesRead = await stream.ReadAsync(publicKeyBytes, 0, publicKeyBytes.Length);
-                return rsaEncryption.ConvertBytesToPublicKey(publicKeyBytes, bytesRead);
-            }
-            catch (Exception ex)
-            {
-                LogMessage($"Error receiving public key: {ex.Message}", "ERROR");
-                return default;
             }
         }
 
@@ -172,7 +190,7 @@ namespace Sp00ksy
 
             try
             {
-                var encryptedMessage = rsaEncryption.EncryptMessage(message);
+                var encryptedMessage = encryptionHelper.EncryptMessage(message);
                 using (var sw = new StreamWriter(stream) { AutoFlush = true })
                 {
                     await sw.WriteLineAsync(Convert.ToBase64String(encryptedMessage));
@@ -199,79 +217,53 @@ namespace Sp00ksy
 
         private void PlasmaChat_FormClosing(object sender, FormClosingEventArgs e)
         {
-            client?.Close();
-            server?.Stop();
-        }
-    }
-
-    public class RSAEncryption
-    {
-        private RSAParameters privateKey;
-        private RSAParameters publicKey;
-        public RSAParameters PartnerPublicKey { get; set; }
-
-        public RSAEncryption()
-        {
-            GenerateKeys();
-        }
-
-        private void GenerateKeys()
-        {
-            using (var rsa = new RSACryptoServiceProvider(2048))
+            try
             {
-                privateKey = rsa.ExportParameters(true);
-                publicKey = rsa.ExportParameters(false);
-            }
-        }
-
-        public byte[] EncryptMessage(string message)
-        {
-            using (var rsa = new RSACryptoServiceProvider())
-            {
-                rsa.ImportParameters(PartnerPublicKey);
-                return rsa.Encrypt(Encoding.UTF8.GetBytes(message), false);
-            }
-        }
-
-        public string DecryptMessage(byte[] encryptedMessage)
-        {
-            using (var rsa = new RSACryptoServiceProvider())
-            {
-                rsa.ImportParameters(privateKey);
-                var decryptedBytes = rsa.Decrypt(encryptedMessage, false);
-                return Encoding.UTF8.GetString(decryptedBytes);
-            }
-        }
-
-        public byte[] ConvertPublicKeyToBytes()
-        {
-            using (var ms = new MemoryStream())
-            {
-                using (var writer = new BinaryWriter(ms))
+                if (client != null)
                 {
-                    writer.Write(publicKey.Modulus.Length);
-                    writer.Write(publicKey.Modulus);
-                    writer.Write(publicKey.Exponent.Length);
-                    writer.Write(publicKey.Exponent);
+                    LogMessage("You have disconnected from the server."); // Notify user about disconnection
+                    stream?.Close();
+                    client.Close();
                 }
-                return ms.ToArray();
+                if (server != null)
+                {
+                    LogMessage("Server is shutting down."); // Notify user about server shutdown
+                    server.Stop();
+                }
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error closing connections: {ex.Message}", "ERROR");
             }
         }
 
-        public RSAParameters ConvertBytesToPublicKey(byte[] bytes, int length)
+        private void btnShowPorts_Click(object sender, EventArgs e)
         {
-            using (var ms = new MemoryStream(bytes, 0, length))
+            try
             {
-                using (var reader = new BinaryReader(ms))
+                // Create a new process to run the netstat command
+                using (var process = new System.Diagnostics.Process())
                 {
-                    var modulusLength = reader.ReadInt32();
-                    var modulus = reader.ReadBytes(modulusLength);
+                    process.StartInfo.FileName = "netstat";
+                    process.StartInfo.Arguments = "-an"; // List all ports and their states
+                    process.StartInfo.RedirectStandardOutput = true;
+                    process.StartInfo.UseShellExecute = false;
+                    process.StartInfo.CreateNoWindow = true;
 
-                    var exponentLength = reader.ReadInt32();
-                    var exponent = reader.ReadBytes(exponentLength);
+                    process.Start();
 
-                    return new RSAParameters { Modulus = modulus, Exponent = exponent };
+                    // Read the output
+                    string output = process.StandardOutput.ReadToEnd();
+
+                    process.WaitForExit();
+
+                    // Show the result in a message box
+                    MessageBox.Show(output, "Open Ports", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error executing netstat: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }
