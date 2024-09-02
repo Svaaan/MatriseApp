@@ -15,146 +15,170 @@
 
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.txtChatLog = new System.Windows.Forms.RichTextBox();
-            this.txtIPAddress = new System.Windows.Forms.TextBox();
-            this.txtPort = new System.Windows.Forms.TextBox();
-            this.txtMessage = new System.Windows.Forms.TextBox();
-            this.btnStartServer = new System.Windows.Forms.Button();
-            this.btnConnect = new System.Windows.Forms.Button();
-            this.btnSendMessage = new System.Windows.Forms.Button();
-            this.btnShowPorts = new System.Windows.Forms.Button();
-            this.btnSaveLogs = new System.Windows.Forms.Button();
-            this.btnClearLogs = new System.Windows.Forms.Button();
-            this.labelIP = new System.Windows.Forms.Label();
-            this.labelPort = new System.Windows.Forms.Label();
-            this.SuspendLayout();
-
-            this.MaximizeBox = false; // Disable the maximize button
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-
+            txtChatLog = new RichTextBox();
+            txtIPAddress = new TextBox();
+            txtPort = new TextBox();
+            txtMessage = new TextBox();
+            btnStartServer = new Button();
+            btnConnect = new Button();
+            btnSendMessage = new Button();
+            btnShowPorts = new Button();
+            btnSaveLogs = new Button();
+            btnClearLogs = new Button();
+            labelIP = new Label();
+            labelPort = new Label();
+            SuspendLayout();
+            // 
             // txtChatLog
-            this.txtChatLog.BackColor = System.Drawing.Color.Black;
-            this.txtChatLog.ForeColor = System.Drawing.Color.White;
-            this.txtChatLog.Location = new System.Drawing.Point(12, 12);
-            this.txtChatLog.Name = "txtChatLog";
-            this.txtChatLog.ReadOnly = true;
-            this.txtChatLog.Size = new System.Drawing.Size(600, 300);
-            this.txtChatLog.TabIndex = 0;
-            this.txtChatLog.Text = "";
-
+            // 
+            txtChatLog.BackColor = Color.Black;
+            txtChatLog.ForeColor = Color.White;
+            txtChatLog.Location = new Point(14, 14);
+            txtChatLog.Margin = new Padding(4, 3, 4, 3);
+            txtChatLog.Name = "txtChatLog";
+            txtChatLog.ReadOnly = true;
+            txtChatLog.Size = new Size(699, 346);
+            txtChatLog.TabIndex = 0;
+            txtChatLog.Text = "";
+            // 
             // txtIPAddress
-            this.txtIPAddress.Location = new System.Drawing.Point(80, 320);
-            this.txtIPAddress.Name = "txtIPAddress";
-            this.txtIPAddress.Size = new System.Drawing.Size(150, 20);
-            this.txtIPAddress.TabIndex = 1;
-            this.txtIPAddress.Text = "127.0.0.1"; // Default IP Address
-
+            // 
+            txtIPAddress.Location = new Point(87, 371);
+            txtIPAddress.Margin = new Padding(4, 3, 4, 3);
+            txtIPAddress.Name = "txtIPAddress";
+            txtIPAddress.Size = new Size(174, 23);
+            txtIPAddress.TabIndex = 1;
+            txtIPAddress.Text = "127.0.0.1";
+            // 
             // txtPort
-            this.txtPort.Location = new System.Drawing.Point(80, 350);
-            this.txtPort.Name = "txtPort";
-            this.txtPort.Size = new System.Drawing.Size(150, 20);
-            this.txtPort.TabIndex = 2;
-            this.txtPort.Text = "8080"; // Default Port
-
+            // 
+            txtPort.Location = new Point(87, 404);
+            txtPort.Margin = new Padding(4, 3, 4, 3);
+            txtPort.Name = "txtPort";
+            txtPort.Size = new Size(174, 23);
+            txtPort.TabIndex = 2;
+            txtPort.Text = "8080";
+            // 
             // txtMessage
-            this.txtMessage.Location = new System.Drawing.Point(12, 380);
-            this.txtMessage.Name = "txtMessage";
-            this.txtMessage.Size = new System.Drawing.Size(400, 20);
-            this.txtMessage.TabIndex = 3;
-
+            // 
+            txtMessage.Location = new Point(87, 439);
+            txtMessage.Margin = new Padding(4, 3, 4, 3);
+            txtMessage.Name = "txtMessage";
+            txtMessage.Size = new Size(450, 23);
+            txtMessage.TabIndex = 3;
+            // 
             // btnStartServer
-            this.btnStartServer.Location = new System.Drawing.Point(250, 320);
-            this.btnStartServer.Name = "btnStartServer";
-            this.btnStartServer.Size = new System.Drawing.Size(100, 23);
-            this.btnStartServer.TabIndex = 4;
-            this.btnStartServer.Text = "Start Server";
-            this.btnStartServer.UseVisualStyleBackColor = true;
-            this.btnStartServer.Click += new System.EventHandler(this.btnStartServer_Click);
-
+            // 
+            btnStartServer.Location = new Point(269, 368);
+            btnStartServer.Margin = new Padding(4, 3, 4, 3);
+            btnStartServer.Name = "btnStartServer";
+            btnStartServer.Size = new Size(117, 27);
+            btnStartServer.TabIndex = 4;
+            btnStartServer.Text = "Start Server";
+            btnStartServer.UseVisualStyleBackColor = true;
+            btnStartServer.Click += btnStartServer_Click;
+            // 
             // btnConnect
-            this.btnConnect.Location = new System.Drawing.Point(250, 350);
-            this.btnConnect.Name = "btnConnect";
-            this.btnConnect.Size = new System.Drawing.Size(100, 23);
-            this.btnConnect.TabIndex = 5;
-            this.btnConnect.Text = "Connect";
-            this.btnConnect.UseVisualStyleBackColor = true;
-            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
-
+            // 
+            btnConnect.Location = new Point(269, 401);
+            btnConnect.Margin = new Padding(4, 3, 4, 3);
+            btnConnect.Name = "btnConnect";
+            btnConnect.Size = new Size(117, 27);
+            btnConnect.TabIndex = 5;
+            btnConnect.Text = "Connect";
+            btnConnect.UseVisualStyleBackColor = true;
+            btnConnect.Click += btnConnect_Click;
+            // 
             // btnSendMessage
-            this.btnSendMessage.Location = new System.Drawing.Point(420, 380);
-            this.btnSendMessage.Name = "btnSendMessage";
-            this.btnSendMessage.Size = new System.Drawing.Size(100, 23);
-            this.btnSendMessage.TabIndex = 6;
-            this.btnSendMessage.Text = "Send";
-            this.btnSendMessage.UseVisualStyleBackColor = true;
-            this.btnSendMessage.Click += new System.EventHandler(this.btnSendMessage_Click);
-
+            // 
+            btnSendMessage.Location = new Point(548, 438);
+            btnSendMessage.Margin = new Padding(4, 3, 4, 3);
+            btnSendMessage.Name = "btnSendMessage";
+            btnSendMessage.Size = new Size(117, 27);
+            btnSendMessage.TabIndex = 6;
+            btnSendMessage.Text = "Send";
+            btnSendMessage.UseVisualStyleBackColor = true;
+            btnSendMessage.Click += btnSendMessage_Click;
+            // 
             // btnShowPorts
-            this.btnShowPorts.Location = new System.Drawing.Point(360, 320); // Positioned to the right of btnStartServer
-            this.btnShowPorts.Name = "btnShowPorts";
-            this.btnShowPorts.Size = new System.Drawing.Size(100, 23);
-            this.btnShowPorts.TabIndex = 7;
-            this.btnShowPorts.Text = "Show Open Ports";
-            this.btnShowPorts.UseVisualStyleBackColor = true;
-            this.btnShowPorts.Click += new System.EventHandler(this.btnShowPorts_Click);
-
+            // 
+            btnShowPorts.Location = new Point(405, 369);
+            btnShowPorts.Margin = new Padding(4, 3, 4, 3);
+            btnShowPorts.Name = "btnShowPorts";
+            btnShowPorts.Size = new Size(117, 27);
+            btnShowPorts.TabIndex = 7;
+            btnShowPorts.Text = "Show Open Ports";
+            btnShowPorts.UseVisualStyleBackColor = true;
+            btnShowPorts.Click += btnShowPorts_Click;
+            // 
             // btnSaveLogs
-            this.btnSaveLogs.Location = new System.Drawing.Point(470, 320); // Positioned to the right of btnShowPorts
-            this.btnSaveLogs.Name = "btnSaveLogs";
-            this.btnSaveLogs.Size = new System.Drawing.Size(100, 23);
-            this.btnSaveLogs.TabIndex = 8;
-            this.btnSaveLogs.Text = "Save Logs";
-            this.btnSaveLogs.UseVisualStyleBackColor = true;
-            this.btnSaveLogs.Click += new System.EventHandler(this.btnSaveLogs_Click);
-
+            // 
+            btnSaveLogs.Location = new Point(548, 369);
+            btnSaveLogs.Margin = new Padding(4, 3, 4, 3);
+            btnSaveLogs.Name = "btnSaveLogs";
+            btnSaveLogs.Size = new Size(117, 27);
+            btnSaveLogs.TabIndex = 8;
+            btnSaveLogs.Text = "Save Logs";
+            btnSaveLogs.UseVisualStyleBackColor = true;
+            btnSaveLogs.Click += btnSaveLogs_Click;
+            // 
             // btnClearLogs
-            this.btnClearLogs.Location = new System.Drawing.Point(470, 350); // Positioned below btnSaveLogs
-            this.btnClearLogs.Name = "btnClearLogs";
-            this.btnClearLogs.Size = new System.Drawing.Size(100, 23);
-            this.btnClearLogs.TabIndex = 9;
-            this.btnClearLogs.Text = "Clear Logs";
-            this.btnClearLogs.UseVisualStyleBackColor = true;
-            this.btnClearLogs.Click += new System.EventHandler(this.btnClearLogs_Click);
-
+            // 
+            btnClearLogs.Location = new Point(548, 404);
+            btnClearLogs.Margin = new Padding(4, 3, 4, 3);
+            btnClearLogs.Name = "btnClearLogs";
+            btnClearLogs.Size = new Size(117, 27);
+            btnClearLogs.TabIndex = 9;
+            btnClearLogs.Text = "Clear Logs";
+            btnClearLogs.UseVisualStyleBackColor = true;
+            btnClearLogs.Click += btnClearLogs_Click;
+            // 
             // labelIP
-            this.labelIP.AutoSize = true;
-            this.labelIP.Location = new System.Drawing.Point(12, 323);
-            this.labelIP.Name = "labelIP";
-            this.labelIP.Size = new System.Drawing.Size(58, 13);
-            this.labelIP.TabIndex = 10;
-            this.labelIP.Text = "IP Address";
-
+            // 
+            labelIP.AutoSize = true;
+            labelIP.Location = new Point(14, 373);
+            labelIP.Margin = new Padding(4, 0, 4, 0);
+            labelIP.Name = "labelIP";
+            labelIP.Size = new Size(62, 15);
+            labelIP.TabIndex = 10;
+            labelIP.Text = "IP Address";
+            // 
             // labelPort
-            this.labelPort.AutoSize = true;
-            this.labelPort.Location = new System.Drawing.Point(12, 353);
-            this.labelPort.Name = "labelPort";
-            this.labelPort.Size = new System.Drawing.Size(26, 13);
-            this.labelPort.TabIndex = 11;
-            this.labelPort.Text = "Port";
-
+            // 
+            labelPort.AutoSize = true;
+            labelPort.Location = new Point(14, 407);
+            labelPort.Margin = new Padding(4, 0, 4, 0);
+            labelPort.Name = "labelPort";
+            labelPort.Size = new Size(29, 15);
+            labelPort.TabIndex = 11;
+            labelPort.Text = "Port";
+            // 
             // PlasmaChat
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.Black;
-            this.ClientSize = new System.Drawing.Size(624, 411);
-            this.Controls.Add(this.labelPort);
-            this.Controls.Add(this.labelIP);
-            this.Controls.Add(this.btnClearLogs);
-            this.Controls.Add(this.btnSaveLogs);
-            this.Controls.Add(this.btnShowPorts);
-            this.Controls.Add(this.btnSendMessage);
-            this.Controls.Add(this.btnConnect);
-            this.Controls.Add(this.btnStartServer);
-            this.Controls.Add(this.txtMessage);
-            this.Controls.Add(this.txtPort);
-            this.Controls.Add(this.txtIPAddress);
-            this.Controls.Add(this.txtChatLog);
-            this.Name = "PlasmaChat";
-            this.Text = "PlasmaChat";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.PlasmaChat_FormClosing);
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Black;
+            ClientSize = new Size(728, 474);
+            Controls.Add(labelPort);
+            Controls.Add(labelIP);
+            Controls.Add(btnClearLogs);
+            Controls.Add(btnSaveLogs);
+            Controls.Add(btnShowPorts);
+            Controls.Add(btnSendMessage);
+            Controls.Add(btnConnect);
+            Controls.Add(btnStartServer);
+            Controls.Add(txtMessage);
+            Controls.Add(txtPort);
+            Controls.Add(txtIPAddress);
+            Controls.Add(txtChatLog);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            Margin = new Padding(4, 3, 4, 3);
+            MaximizeBox = false;
+            Name = "PlasmaChat";
+            Text = "PlasmaChat";
+            FormClosing += PlasmaChat_FormClosing;
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         private System.Windows.Forms.RichTextBox txtChatLog;
