@@ -3,12 +3,12 @@
     partial class MainForm
     {
         /// <summary>
-        ///  Required designer variable.
+        /// Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -23,8 +23,8 @@
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
@@ -39,15 +39,21 @@
             this.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
 
+            this.MaximizeBox = false; // Disable the maximize button
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             // 
             // btnOpenChat
             // 
-            this.btnOpenChat.Location = new System.Drawing.Point(20, 80); // Adjust position as needed
+            this.btnOpenChat.BackColor = System.Drawing.Color.Black;
+            this.btnOpenChat.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnOpenChat.ForeColor = System.Drawing.Color.Transparent;
+            this.btnOpenChat.Location = new System.Drawing.Point(686, 3); // Adjust position as needed
             this.btnOpenChat.Name = "btnOpenChat";
-            this.btnOpenChat.Size = new System.Drawing.Size(100, 30);
+            this.btnOpenChat.Size = new System.Drawing.Size(336, 34); // Ensure the size fits within the row
             this.btnOpenChat.TabIndex = 3;
             this.btnOpenChat.Text = "Chat";
-            this.btnOpenChat.UseVisualStyleBackColor = true;
+            this.btnOpenChat.UseVisualStyleBackColor = false; // Set to false if you want to use BackColor
             this.btnOpenChat.Click += new System.EventHandler(this.btnOpenChat_Click);
 
             // 
@@ -82,9 +88,9 @@
             this.button3.BackColor = System.Drawing.Color.Black;
             this.button3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(685, 3);
+            this.button3.Location = new System.Drawing.Point(686, 3);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(337, 34);
+            this.button3.Size = new System.Drawing.Size(336, 34);
             this.button3.TabIndex = 2;
             this.button3.Text = "Check ping";
             this.button3.UseVisualStyleBackColor = false;
@@ -93,13 +99,15 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.BackColor = System.Drawing.Color.Transparent;
-            this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33F));
+            this.tableLayoutPanel1.ColumnCount = 4; // Updated to include 4 columns
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.Controls.Add(this.button1, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.button2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.button3, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.btnOpenChat, 3, 0); // Add btnOpenChat to the last column
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -117,7 +125,6 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1025, 487);
-            this.Controls.Add(this.btnOpenChat); // Add btnOpenChat control to the form
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "MainForm";
             this.Text = "Sp00ksy";

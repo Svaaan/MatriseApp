@@ -42,6 +42,9 @@ namespace Sp00ksy
             tableLayoutPanel.SuspendLayout();
             SuspendLayout();
 
+            this.MaximizeBox = false; // Disable the maximize button
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             // 
             // buttonUpload
             // 
@@ -111,7 +114,6 @@ namespace Sp00ksy
             Controls.Add(tableLayoutPanel);
             Name = "ImageConverterForm";
             Text = "Image Converter";
-            Load += ImageConverterForm_Load_2;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             tableLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);

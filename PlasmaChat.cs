@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Drawing;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Sp00ksy.Services.Helpers; // Ensure this namespace is included to access MatrixRain
 
 namespace Sp00ksy
 {
@@ -12,35 +14,67 @@ namespace Sp00ksy
     {
         private TcpClient client;
         private TcpListener server;
-        private NetworkStream clientStream; // Separate client stream
+        private NetworkStream clientStream;
         private StreamWriter clientWriter;
         private StreamReader clientReader;
-        private TcpClient serverClient; // The client connection for server-initiated clients
-        private NetworkStream serverClientStream; // Stream for the server-initiated client
+        private TcpClient serverClient;
+        private NetworkStream serverClientStream;
         private StreamWriter serverClientWriter;
         private readonly object streamLock = new object();
-        private Button btnShowPorts;
+        private System.Windows.Forms.Timer transitionTimer; // Explicitly use System.Windows.Forms.Timer
+        private MatrixRain matrixRain;
 
         public PlasmaChat()
         {
             InitializeComponent();
-            InitializeCustomComponents();
+            InitializeTransitionTimer();
         }
 
-        private void InitializeCustomComponents()
+        private void InitializeTransitionTimer()
         {
-            btnShowPorts = new Button
+            transitionTimer = new System.Windows.Forms.Timer // Explicitly use System.Windows.Forms.Timer
             {
-                Text = "Show Open Ports",
-                Location = new Point(10, 10) // Adjust location as needed
+                Interval = 2000 // Duration for the Matrix Rain effect
             };
+            transitionTimer.Tick += TransitionTimer_Tick;
+        }
 
-            btnShowPorts.Click += btnShowPorts_Click;
-            Controls.Add(btnShowPorts);
+        private void StartTransition()
+        {
+            if (matrixRain == null)
+            {
+                matrixRain = new MatrixRain
+                {
+                    Dock = DockStyle.Fill,
+                    BackColor = Color.Transparent
+                };
+                this.Controls.Add(matrixRain);
+                this.Controls.SetChildIndex(matrixRain, 0); // Ensure it's behind other controls
+            }
+            transitionTimer.Start();
+        }
+
+        private void TransitionTimer_Tick(object sender, EventArgs e)
+        {
+            transitionTimer.Stop();
+            if (matrixRain != null)
+            {
+                this.Controls.Remove(matrixRain);
+                matrixRain.Dispose();
+                matrixRain = null;
+            }
+        }
+
+        private void ClearLogs()
+        {
+            txtChatLog.Clear();
         }
 
         private async void btnStartServer_Click(object sender, EventArgs e)
         {
+            // Start Matrix Rain transition
+            StartTransition();
+
             if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
             {
                 LogMessage("Invalid port number.", "ERROR");
@@ -62,6 +96,9 @@ namespace Sp00ksy
 
         private async void btnConnect_Click(object sender, EventArgs e)
         {
+            // Start Matrix Rain transition
+            StartTransition();
+
             string ipAddress = txtIPAddress.Text;
             if (!IPAddress.TryParse(ipAddress, out _))
             {
@@ -154,7 +191,7 @@ namespace Sp00ksy
             }
         }
 
-        public async void btnSendMessage_Click(object sender, EventArgs e)
+        private async void btnSendMessage_Click(object sender, EventArgs e)
         {
             string message = txtMessage.Text.Trim();
             if (string.IsNullOrWhiteSpace(message))
@@ -168,15 +205,13 @@ namespace Sp00ksy
                 if (clientWriter != null)
                 {
                     await clientWriter.WriteLineAsync(message);
-                    LogMessage($"You: {message}");
-                    LogMessage("Client sent message.");
+                    LogMessage($"You: {message}"); // Keep this log to show the message was sent
                     txtMessage.Clear();
                 }
                 else if (serverClientWriter != null)
                 {
                     await serverClientWriter.WriteLineAsync(message);
-                    LogMessage($"You (Server Client): {message}");
-                    LogMessage("Server client sent message.");
+                    LogMessage($"You (Server Client): {message}"); // Keep this log to show the message was sent
                     txtMessage.Clear();
                 }
                 else
@@ -247,6 +282,36 @@ namespace Sp00ksy
             {
                 MessageBox.Show($"Error executing netstat: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void SaveLogsToFile()
+        {
+            try
+            {
+                // Set the file path and name
+                string fileName = $"ChatLog_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
+                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName);
+
+                // Write the log content to the file
+                File.WriteAllText(filePath, txtChatLog.Text);
+
+                // Inform the user
+                MessageBox.Show($"Chat log saved to {filePath}", "Log Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error saving log: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnSaveLogs_Click(object sender, EventArgs e)
+        {
+            SaveLogsToFile();
+        }
+
+        private void btnClearLogs_Click(object sender, EventArgs e)
+        {
+            ClearLogs();
         }
     }
 }
