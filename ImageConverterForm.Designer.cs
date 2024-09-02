@@ -114,7 +114,6 @@ namespace Sp00ksy
             Controls.Add(tableLayoutPanel);
             Name = "ImageConverterForm";
             Text = "Image Converter";
-            Load += ImageConverterForm_Load_2;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             tableLayoutPanel.ResumeLayout(false);
             ResumeLayout(false);

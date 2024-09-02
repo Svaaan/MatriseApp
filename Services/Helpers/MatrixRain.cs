@@ -3,7 +3,7 @@ using System.Drawing;
 using System.Windows.Forms;
 
 
-namespace Sp00ksy.Services
+namespace Sp00ksy.Services.Helpers
 {
     public class MatrixRain : Panel
     {
@@ -15,9 +15,9 @@ namespace Sp00ksy.Services
 
         public MatrixRain()
         {
-            this.DoubleBuffered = true;
-            this.Dock = DockStyle.Fill;
-            this.BackColor = Color.Black;
+            DoubleBuffered = true;
+            Dock = DockStyle.Fill;
+            BackColor = Color.Black;
 
             yPos = new int[ColumnCount];
             for (int i = 0; i < ColumnCount; i++)
@@ -50,7 +50,7 @@ namespace Sp00ksy.Services
             {
                 int x = i * 15;
                 yPos[i] += 15;
-                if (yPos[i] > this.ClientSize.Height)
+                if (yPos[i] > ClientSize.Height)
                 {
                     yPos[i] = 0;
                 }
