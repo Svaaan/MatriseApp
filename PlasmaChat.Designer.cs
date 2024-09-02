@@ -19,14 +19,17 @@
             txtIPAddress = new TextBox();
             txtPort = new TextBox();
             txtMessage = new TextBox();
+            txtNickname = new TextBox(); // Add this line
             btnStartServer = new Button();
             btnConnect = new Button();
             btnSendMessage = new Button();
             btnShowPorts = new Button();
             btnSaveLogs = new Button();
             btnClearLogs = new Button();
+            btnUpdateNickname = new Button(); // Add this line
             labelIP = new Label();
             labelPort = new Label();
+            labelNickname = new Label(); // Add this line
             SuspendLayout();
             // 
             // txtChatLog
@@ -66,6 +69,15 @@
             txtMessage.Name = "txtMessage";
             txtMessage.Size = new Size(450, 23);
             txtMessage.TabIndex = 3;
+            // 
+            // txtNickname
+            // 
+            txtNickname.Location = new Point(87, 467); // Position this control below the message text box
+            txtNickname.Margin = new Padding(4, 3, 4, 3);
+            txtNickname.Name = "txtNickname";
+            txtNickname.Size = new Size(174, 23);
+            txtNickname.TabIndex = 12;
+            txtNickname.Text = "Guest"; // Default nickname
             // 
             // btnStartServer
             // 
@@ -133,6 +145,17 @@
             btnClearLogs.UseVisualStyleBackColor = true;
             btnClearLogs.Click += btnClearLogs_Click;
             // 
+            // btnUpdateNickname
+            // 
+            btnUpdateNickname.Location = new Point(269, 467); // Position this control near the nickname text box
+            btnUpdateNickname.Margin = new Padding(4, 3, 4, 3);
+            btnUpdateNickname.Name = "btnUpdateNickname";
+            btnUpdateNickname.Size = new Size(117, 27);
+            btnUpdateNickname.TabIndex = 13;
+            btnUpdateNickname.Text = "Update Nickname";
+            btnUpdateNickname.UseVisualStyleBackColor = true;
+            btnUpdateNickname.Click += btnUpdateNickname_Click;
+            // 
             // labelIP
             // 
             labelIP.AutoSize = true;
@@ -153,12 +176,25 @@
             labelPort.TabIndex = 11;
             labelPort.Text = "Port";
             // 
+            // labelNickname
+            // 
+            labelNickname.AutoSize = true; // Add this line
+            labelNickname.Location = new Point(14, 470); // Position label next to nickname text box
+            labelNickname.Margin = new Padding(4, 0, 4, 0); // Adjust margins if needed
+            labelNickname.Name = "labelNickname"; // Add this line
+            labelNickname.Size = new Size(66, 15); // Adjust size if needed
+            labelNickname.TabIndex = 14; // Update TabIndex
+            labelNickname.Text = "Nickname"; // Add this line
+            // 
             // PlasmaChat
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            ClientSize = new Size(728, 474);
+            ClientSize = new Size(728, 510); // Adjust the height to accommodate new controls
+            Controls.Add(labelNickname); // Add this line
+            Controls.Add(btnUpdateNickname); // Add this line
+            Controls.Add(txtNickname); // Add this line
             Controls.Add(labelPort);
             Controls.Add(labelIP);
             Controls.Add(btnClearLogs);
@@ -185,13 +221,16 @@
         private System.Windows.Forms.TextBox txtIPAddress;
         private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.TextBox txtMessage;
+        private System.Windows.Forms.TextBox txtNickname; // Add this line
         private System.Windows.Forms.Button btnStartServer;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Button btnSendMessage;
         private System.Windows.Forms.Button btnShowPorts;
         private System.Windows.Forms.Button btnSaveLogs;
         private System.Windows.Forms.Button btnClearLogs;
+        private System.Windows.Forms.Button btnUpdateNickname; // Add this line
         private System.Windows.Forms.Label labelIP;
         private System.Windows.Forms.Label labelPort;
+        private System.Windows.Forms.Label labelNickname; // Add this line
     }
 }
