@@ -42,6 +42,9 @@ namespace Sp00ksy
             tableLayoutPanel.SuspendLayout();
             SuspendLayout();
 
+            this.MaximizeBox = false; // Disable the maximize button
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             // 
             // buttonUpload
             // 

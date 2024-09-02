@@ -30,6 +30,9 @@
             this.labelPort = new System.Windows.Forms.Label();
             this.SuspendLayout();
 
+            this.MaximizeBox = false; // Disable the maximize button
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             // txtChatLog
             this.txtChatLog.BackColor = System.Drawing.Color.Black;
             this.txtChatLog.ForeColor = System.Drawing.Color.White;

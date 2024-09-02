@@ -39,6 +39,9 @@
             this.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
 
+            this.MaximizeBox = false; // Disable the maximize button
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             // 
             // btnOpenChat
             // 

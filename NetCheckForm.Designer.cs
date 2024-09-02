@@ -42,6 +42,10 @@ namespace Sp00ksy
             numberOfTestsUpDown = new NumericUpDown(); // Add NumericUpDown control
             ((System.ComponentModel.ISupportInitialize)numberOfTestsUpDown).BeginInit();
             SuspendLayout();
+
+            this.MaximizeBox = false; // Disable the maximize button
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+
             // 
             // speedTestButton
             // 
