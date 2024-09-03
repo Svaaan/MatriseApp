@@ -15,202 +15,115 @@
 
         private void InitializeComponent()
         {
-            txtChatLog = new RichTextBox();
-            txtIPAddress = new TextBox();
-            txtPort = new TextBox();
-            txtMessage = new TextBox();
-            txtNickname = new TextBox(); // Add this line
-            btnStartServer = new Button();
-            btnConnect = new Button();
-            btnSendMessage = new Button();
-            btnShowPorts = new Button();
-            btnSaveLogs = new Button();
-            btnClearLogs = new Button();
-            btnUpdateNickname = new Button(); // Add this line
-            labelIP = new Label();
-            labelPort = new Label();
-            labelNickname = new Label(); // Add this line
+            this.txtIPAddress = new System.Windows.Forms.TextBox();
+            this.txtPort = new System.Windows.Forms.TextBox();
+            this.btnStartServer = new System.Windows.Forms.Button();
+            this.btnConnect = new System.Windows.Forms.Button();
+            this.btnShowPorts = new System.Windows.Forms.Button();
+            this.labelIP = new System.Windows.Forms.Label();
+            this.labelPort = new System.Windows.Forms.Label();
 
-            SuspendLayout();
-            // 
-            // txtChatLog
-            // 
-            txtChatLog.BackColor = Color.Black;
-            txtChatLog.ForeColor = Color.White;
-            txtChatLog.Location = new Point(14, 14);
-            txtChatLog.Margin = new Padding(4, 3, 4, 3);
-            txtChatLog.Name = "txtChatLog";
-            txtChatLog.ReadOnly = true;
-            txtChatLog.Size = new Size(699, 346);
-            txtChatLog.TabIndex = 0;
-            txtChatLog.Text = "";
+            this.SuspendLayout();
             // 
             // txtIPAddress
             // 
-            txtIPAddress.Location = new Point(87, 371);
-            txtIPAddress.Margin = new Padding(4, 3, 4, 3);
-            txtIPAddress.Name = "txtIPAddress";
-            txtIPAddress.Size = new Size(174, 23);
-            txtIPAddress.TabIndex = 1;
-            txtIPAddress.Text = "127.0.0.1";
+            this.txtIPAddress.Location = new System.Drawing.Point(87, 371);
+            this.txtIPAddress.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtIPAddress.Name = "txtIPAddress";
+            this.txtIPAddress.Size = new System.Drawing.Size(174, 23);
+            this.txtIPAddress.TabIndex = 1;
+            this.txtIPAddress.Text = "127.0.0.1";
             // 
             // txtPort
             // 
-            txtPort.Location = new Point(87, 404);
-            txtPort.Margin = new Padding(4, 3, 4, 3);
-            txtPort.Name = "txtPort";
-            txtPort.Size = new Size(174, 23);
-            txtPort.TabIndex = 2;
-            txtPort.Text = "8080";
-            // 
-            // txtMessage
-            // 
-            txtMessage.Location = new Point(87, 439);
-            txtMessage.Margin = new Padding(4, 3, 4, 3);
-            txtMessage.Name = "txtMessage";
-            txtMessage.Size = new Size(450, 23);
-            txtMessage.TabIndex = 3;
-            // 
-            // txtNickname
-            // 
-            txtNickname.Location = new Point(87, 467); // Position this control below the message text box
-            txtNickname.Margin = new Padding(4, 3, 4, 3);
-            txtNickname.Name = "txtNickname";
-            txtNickname.Size = new Size(174, 23);
-            txtNickname.TabIndex = 12;
-            txtNickname.Text = "Guest"; // Default nickname
+            this.txtPort.Location = new System.Drawing.Point(87, 404);
+            this.txtPort.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.txtPort.Name = "txtPort";
+            this.txtPort.Size = new System.Drawing.Size(174, 23);
+            this.txtPort.TabIndex = 2;
+            this.txtPort.Text = "8080";
             // 
             // btnStartServer
             // 
-            btnStartServer.Location = new Point(269, 368);
-            btnStartServer.Margin = new Padding(4, 3, 4, 3);
-            btnStartServer.Name = "btnStartServer";
-            btnStartServer.Size = new Size(117, 27);
-            btnStartServer.TabIndex = 4;
-            btnStartServer.Text = "Start Server";
-            btnStartServer.UseVisualStyleBackColor = true;
-            btnStartServer.Click += btnStartServer_Click;
+            this.btnStartServer.Location = new System.Drawing.Point(269, 368);
+            this.btnStartServer.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnStartServer.Name = "btnStartServer";
+            this.btnStartServer.Size = new System.Drawing.Size(117, 27);
+            this.btnStartServer.TabIndex = 4;
+            this.btnStartServer.Text = "Start Server";
+            this.btnStartServer.UseVisualStyleBackColor = true;
+            this.btnStartServer.Click += new System.EventHandler(this.btnStartServer_Click);
             // 
             // btnConnect
             // 
-            btnConnect.Location = new Point(269, 401);
-            btnConnect.Margin = new Padding(4, 3, 4, 3);
-            btnConnect.Name = "btnConnect";
-            btnConnect.Size = new Size(117, 27);
-            btnConnect.TabIndex = 5;
-            btnConnect.Text = "Connect";
-            btnConnect.UseVisualStyleBackColor = true;
-            btnConnect.Click += btnConnect_Click;
-            // 
-            // btnSendMessage
-            // 
-            btnSendMessage.Location = new Point(548, 438);
-            btnSendMessage.Margin = new Padding(4, 3, 4, 3);
-            btnSendMessage.Name = "btnSendMessage";
-            btnSendMessage.Size = new Size(117, 27);
-            btnSendMessage.TabIndex = 6;
-            btnSendMessage.Text = "Send";
-            btnSendMessage.UseVisualStyleBackColor = true;
-            btnSendMessage.Click += btnSendMessage_Click;
+            this.btnConnect.Location = new System.Drawing.Point(269, 401);
+            this.btnConnect.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnConnect.Name = "btnConnect";
+            this.btnConnect.Size = new System.Drawing.Size(117, 27);
+            this.btnConnect.TabIndex = 5;
+            this.btnConnect.Text = "Connect";
+            this.btnConnect.UseVisualStyleBackColor = true;
+            this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
             // 
             // btnShowPorts
             // 
-            btnShowPorts.Location = new Point(405, 369);
-            btnShowPorts.Margin = new Padding(4, 3, 4, 3);
-            btnShowPorts.Name = "btnShowPorts";
-            btnShowPorts.Size = new Size(117, 27);
-            btnShowPorts.TabIndex = 7;
-            btnShowPorts.Text = "Show Open Ports";
-            btnShowPorts.UseVisualStyleBackColor = true;
-            btnShowPorts.Click += btnShowPorts_Click;
-      
-   
-            // 
-            // btnUpdateNickname
-            // 
-            btnUpdateNickname.Location = new Point(269, 467); // Position this control near the nickname text box
-            btnUpdateNickname.Margin = new Padding(4, 3, 4, 3);
-            btnUpdateNickname.Name = "btnUpdateNickname";
-            btnUpdateNickname.Size = new Size(117, 27);
-            btnUpdateNickname.TabIndex = 13;
-            btnUpdateNickname.Text = "Update Nickname";
-            btnUpdateNickname.UseVisualStyleBackColor = true;
-            btnUpdateNickname.Click += btnUpdateNickname_Click;
+            this.btnShowPorts.Location = new System.Drawing.Point(405, 369);
+            this.btnShowPorts.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.btnShowPorts.Name = "btnShowPorts";
+            this.btnShowPorts.Size = new System.Drawing.Size(117, 27);
+            this.btnShowPorts.TabIndex = 7;
+            this.btnShowPorts.Text = "Show Open Ports";
+            this.btnShowPorts.UseVisualStyleBackColor = true;
+            this.btnShowPorts.Click += new System.EventHandler(this.btnShowPorts_Click);
             // 
             // labelIP
             // 
-            labelIP.AutoSize = true;
-            labelIP.Location = new Point(14, 373);
-            labelIP.Margin = new Padding(4, 0, 4, 0);
-            labelIP.Name = "labelIP";
-            labelIP.Size = new Size(62, 15);
-            labelIP.TabIndex = 10;
-            labelIP.Text = "IP Address";
+            this.labelIP.AutoSize = true;
+            this.labelIP.Location = new System.Drawing.Point(14, 373);
+            this.labelIP.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelIP.Name = "labelIP";
+            this.labelIP.Size = new System.Drawing.Size(62, 15);
+            this.labelIP.TabIndex = 10;
+            this.labelIP.Text = "IP Address";
             // 
             // labelPort
             // 
-            labelPort.AutoSize = true;
-            labelPort.Location = new Point(14, 407);
-            labelPort.Margin = new Padding(4, 0, 4, 0);
-            labelPort.Name = "labelPort";
-            labelPort.Size = new Size(29, 15);
-            labelPort.TabIndex = 11;
-            labelPort.Text = "Port";
-            // 
-            // labelNickname
-            // 
-            labelNickname.AutoSize = true; // Add this line
-            labelNickname.Location = new Point(14, 470); // Position label next to nickname text box
-            labelNickname.Margin = new Padding(4, 0, 4, 0); // Adjust margins if needed
-            labelNickname.Name = "labelNickname"; // Add this line
-            labelNickname.Size = new Size(66, 15); // Adjust size if needed
-            labelNickname.TabIndex = 14; // Update TabIndex
-            labelNickname.Text = "Nickname"; // Add this line
+            this.labelPort.AutoSize = true;
+            this.labelPort.Location = new System.Drawing.Point(14, 407);
+            this.labelPort.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelPort.Name = "labelPort";
+            this.labelPort.Size = new System.Drawing.Size(29, 15);
+            this.labelPort.TabIndex = 11;
+            this.labelPort.Text = "Port";
             // 
             // IpChatConnection
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Black;
-            ClientSize = new Size(728, 510); // Adjust the height to accommodate new controls
-            Controls.Add(labelNickname); // Add this line
-            Controls.Add(btnUpdateNickname); // Add this line
-            Controls.Add(txtNickname); // Add this line
-            Controls.Add(labelPort);
-            Controls.Add(labelIP);
-            Controls.Add(btnClearLogs);
-            Controls.Add(btnSaveLogs);
-            Controls.Add(btnShowPorts);
-            Controls.Add(btnSendMessage);
-            Controls.Add(btnConnect);
-            Controls.Add(btnStartServer);
-            Controls.Add(txtMessage);
-            Controls.Add(txtPort);
-            Controls.Add(txtIPAddress);
-            Controls.Add(txtChatLog);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            Margin = new Padding(4, 3, 4, 3);
-            MaximizeBox = false;
-            Name = "IpChatConnection";
-            Text = "Chat";
-            ResumeLayout(false);
-            PerformLayout();
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.Black;
+            this.ClientSize = new System.Drawing.Size(728, 510);
+            this.Controls.Add(this.btnShowPorts);
+            this.Controls.Add(this.btnConnect);
+            this.Controls.Add(this.btnStartServer);
+            this.Controls.Add(this.txtPort);
+            this.Controls.Add(this.txtIPAddress);
+            this.Controls.Add(this.labelPort);
+            this.Controls.Add(this.labelIP);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.MaximizeBox = false;
+            this.Name = "IpChatConnection";
+            this.Text = "Chat Connection";
+            this.ResumeLayout(false);
+            this.PerformLayout();
         }
 
-        private System.Windows.Forms.RichTextBox txtChatLog;
         private System.Windows.Forms.TextBox txtIPAddress;
         private System.Windows.Forms.TextBox txtPort;
-        private System.Windows.Forms.TextBox txtMessage;
-        private System.Windows.Forms.TextBox txtNickname;
         private System.Windows.Forms.Button btnStartServer;
         private System.Windows.Forms.Button btnConnect;
-        private System.Windows.Forms.Button btnSendMessage;
         private System.Windows.Forms.Button btnShowPorts;
-        private System.Windows.Forms.Button btnSaveLogs;
-        private System.Windows.Forms.Button btnClearLogs;
-        private System.Windows.Forms.Button btnUpdateNickname;
         private System.Windows.Forms.Label labelIP;
         private System.Windows.Forms.Label labelPort;
-        private System.Windows.Forms.Label labelNickname;
     }
 }

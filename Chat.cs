@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 
@@ -8,12 +9,25 @@ namespace Sp00ksy
     public partial class Chat : Form
     {
         private NetworkStream stream;
+        private string nickname;
 
-        public Chat(NetworkStream stream)
+        public Chat(NetworkStream stream, string nickname)
         {
             InitializeComponent();
             this.stream = stream;
+            this.nickname = nickname;
             FormClosing += Chat_FormClosing; // Register the FormClosing event handler
+        }
+
+        public void LogMessage(string message, string level = "INFO")
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => LogMessage(message, level)));
+                return;
+            }
+            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+            txtChatLog.AppendText($"[{timestamp}] [{level}] {message}{Environment.NewLine}");
         }
 
         private void btnSendMessage_Click(object sender, EventArgs e)
@@ -30,7 +44,7 @@ namespace Sp00ksy
                 // Send the message to the server or client
                 using (var writer = new StreamWriter(stream, leaveOpen: true) { AutoFlush = true })
                 {
-                    writer.WriteLine(message);
+                    writer.WriteLine($"{nickname}: {message}"); // Include nickname in the message
                 }
 
                 LogMessage($"You: {message}"); // Log the sent message
@@ -40,17 +54,6 @@ namespace Sp00ksy
             {
                 LogMessage($"Error sending message: {ex.Message}", "ERROR");
             }
-        }
-
-        private void LogMessage(string message, string level = "INFO")
-        {
-            if (InvokeRequired)
-            {
-                Invoke(new Action(() => LogMessage(message, level)));
-                return;
-            }
-            string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-            txtChatLog.AppendText($"[{timestamp}] [{level}] {message}{Environment.NewLine}");
         }
 
         private void btnSaveLogs_Click(object sender, EventArgs e)
@@ -67,11 +70,11 @@ namespace Sp00ksy
 
                 File.WriteAllText(filePath, txtChatLog.Text);
 
-                MessageBox.Show($"Chat log saved to {filePath}", "Log Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LogMessage($"Chat log saved to {filePath}", "INFO");
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Error saving log: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                LogMessage($"Error saving log: {ex.Message}", "ERROR");
             }
         }
 
