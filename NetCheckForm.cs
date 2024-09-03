@@ -91,9 +91,9 @@ namespace Sp00ksy
 
         private async Task<(double downloadSpeed, double uploadSpeed)> MeasureNetworkSpeedsAsync()
         {
-            // Construct the path to speedtest.exe relative to the project's directory
-            string projectRootPath = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
-            string speedtestCliPath = Path.Combine(projectRootPath, "speedtest.exe");
+            // Construct the path to speedtest.exe relative to the application's base directory
+            string baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            string speedtestCliPath = Path.Combine(baseDirectory, "Resources", "speedtest.exe");
 
             // Check if the file exists to avoid runtime errors
             if (!File.Exists(speedtestCliPath))
