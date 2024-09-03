@@ -1,12 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.IO;
+﻿using System.Net.Sockets;
 using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Sp00ksy.Services.Helpers; // Ensure this namespace is included to access MatrixRain
 
 namespace Sp00ksy
 {
@@ -22,48 +15,11 @@ namespace Sp00ksy
         private StreamWriter serverClientWriter;
         private readonly object streamLock = new object();
         private System.Windows.Forms.Timer transitionTimer; // Explicitly use System.Windows.Forms.Timer
-        private MatrixRain matrixRain;
         private string nickname = "Guest"; // Default nickname
 
         public PlasmaChat()
         {
             InitializeComponent();
-            InitializeTransitionTimer();
-        }
-
-        private void InitializeTransitionTimer()
-        {
-            transitionTimer = new System.Windows.Forms.Timer // Explicitly use System.Windows.Forms.Timer
-            {
-                Interval = 2000 // Duration for the Matrix Rain effect
-            };
-            transitionTimer.Tick += TransitionTimer_Tick;
-        }
-
-        private void StartTransition()
-        {
-            if (matrixRain == null)
-            {
-                matrixRain = new MatrixRain
-                {
-                    Dock = DockStyle.Fill,
-                    BackColor = Color.Transparent
-                };
-                this.Controls.Add(matrixRain);
-                this.Controls.SetChildIndex(matrixRain, 0); // Ensure it's behind other controls
-            }
-            transitionTimer.Start();
-        }
-
-        private void TransitionTimer_Tick(object sender, EventArgs e)
-        {
-            transitionTimer.Stop();
-            if (matrixRain != null)
-            {
-                this.Controls.Remove(matrixRain);
-                matrixRain.Dispose();
-                matrixRain = null;
-            }
         }
 
         private void ClearLogs()
@@ -73,9 +29,6 @@ namespace Sp00ksy
 
         private async void btnStartServer_Click(object sender, EventArgs e)
         {
-            // Start Matrix Rain transition
-            StartTransition();
-
             if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
             {
                 LogMessage("Invalid port number.", "ERROR");
@@ -103,9 +56,6 @@ namespace Sp00ksy
 
         private async void btnConnect_Click(object sender, EventArgs e)
         {
-            // Start Matrix Rain transition
-            StartTransition();
-
             string ipAddress = txtIPAddress.Text;
             if (!IPAddress.TryParse(ipAddress, out _))
             {
@@ -126,7 +76,7 @@ namespace Sp00ksy
                 clientStream = client.GetStream();
                 clientWriter = new StreamWriter(clientStream) { AutoFlush = true };
                 clientReader = new StreamReader(clientStream);
-                LogMessage("Connected to server.");
+                LogMessage($"Connected to server at {ipAddress}:{port}."); // Log connection details
                 await Task.Run(ClientReceiveLoop);
             }
             catch (Exception ex)
@@ -142,10 +92,13 @@ namespace Sp00ksy
                 try
                 {
                     serverClient = await server.AcceptTcpClientAsync();
+                    var remoteEndPoint = (IPEndPoint)serverClient.Client.RemoteEndPoint;
+                    string clientIp = remoteEndPoint.Address.ToString();
+                    int clientPort = remoteEndPoint.Port;
                     serverClientStream = serverClient.GetStream();
                     serverClientWriter = new StreamWriter(serverClientStream) { AutoFlush = true };
                     var serverClientReader = new StreamReader(serverClientStream);
-                    LogMessage("Client connected successfully.");
+                    LogMessage($"Client connected from {clientIp}:{clientPort}.");
 
                     // Run client handling in a separate task
                     _ = Task.Run(async () =>
@@ -157,7 +110,7 @@ namespace Sp00ksy
                             // Echo message back to client
                             await serverClientWriter.WriteLineAsync($"{nickname}: {message}");
                         }
-                        LogMessage("Client disconnected.");
+                        LogMessage($"Client from {clientIp}:{clientPort} disconnected.");
                         serverClient.Close();
                     });
                 }
@@ -319,7 +272,6 @@ namespace Sp00ksy
             ClearLogs();
         }
 
-        // Add a method to update the nickname
         private void btnUpdateNickname_Click(object sender, EventArgs e)
         {
             string newNickname = txtNickname.Text.Trim();
