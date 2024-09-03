@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Windows.Forms;
 
@@ -10,13 +9,20 @@ namespace Sp00ksy
     {
         private NetworkStream stream;
         private string nickname;
+        private string ipAddress;
+        private int port;
 
-        public Chat(NetworkStream stream, string nickname)
+        public Chat(NetworkStream stream, string nickname, string ipAddress, int port)
         {
             InitializeComponent();
             this.stream = stream;
             this.nickname = nickname;
+            this.ipAddress = ipAddress;
+            this.port = port;
             FormClosing += Chat_FormClosing; // Register the FormClosing event handler
+
+            // Log connection success
+            LogMessage($"Connection successful: IP = {ipAddress}, Port = {port}", "INFO");
         }
 
         public void LogMessage(string message, string level = "INFO")
@@ -70,7 +76,7 @@ namespace Sp00ksy
 
                 File.WriteAllText(filePath, txtChatLog.Text);
 
-                LogMessage($"Chat log saved to {filePath}", "INFO");
+                LogMessage($"Chat log saved", "INFO");
             }
             catch (Exception ex)
             {

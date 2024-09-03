@@ -17,6 +17,7 @@ namespace Sp00ksy
         private TcpClient serverClient;
         private NetworkStream serverClientStream;
         private bool isServerRunning = false;
+        private object txtPortLog;
 
         public IpChatConnection()
         {
@@ -39,8 +40,6 @@ namespace Sp00ksy
         {
             if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
             {
-                // Error handling without MessageBox
-                // Example: Log error, set status label, etc.
                 Console.WriteLine("Invalid port number.");
                 return;
             }
@@ -55,7 +54,6 @@ namespace Sp00ksy
                 server = new TcpListener(IPAddress.Any, port);
                 server.Start(); // Start listening for incoming connections
 
-                // Update UI to show server started status
                 isServerRunning = true;
                 btnStartConnect.Text = "Connect";
 
@@ -67,7 +65,7 @@ namespace Sp00ksy
 
                     // Open the Chat form and pass the server's client stream
                     Invoke(new Action(() => {
-                        var chatForm = new Chat(serverClientStream, "ServerNickname"); // Provide the nickname
+                        var chatForm = new Chat(serverClientStream, "ServerNickname", "0.0.0.0", port); // Server IP can be "0.0.0.0"
                         chatForm.Show();
                         this.Hide(); // Optionally hide the current form
                     }));
@@ -75,7 +73,6 @@ namespace Sp00ksy
             }
             catch (Exception ex)
             {
-                // Log error
                 Console.WriteLine($"Error starting server: {ex.Message}");
             }
         }
@@ -85,16 +82,12 @@ namespace Sp00ksy
             string ipAddress = txtIPAddress.Text;
             if (!IPAddress.TryParse(ipAddress, out _))
             {
-                // Error handling without MessageBox
-                // Example: Log error, set status label, etc.
                 Console.WriteLine("Invalid IP address.");
                 return;
             }
 
             if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
             {
-                // Error handling without MessageBox
-                // Example: Log error, set status label, etc.
                 Console.WriteLine("Invalid port number.");
                 return;
             }
@@ -108,16 +101,18 @@ namespace Sp00ksy
                 clientReader = new StreamReader(clientStream);
 
                 // Update UI to show connected status
-                var chatForm = new Chat(clientStream, "ClientNickname"); // Provide the nickname
+                var chatForm = new Chat(clientStream, "ClientNickname", ipAddress, port); // Pass IP and port
                 chatForm.Show();
                 this.Hide(); // Optionally hide the current form
+
+                // Log connection successful
+                Console.WriteLine($"Connection successful: IP = {ipAddress}, Port = {port}");
 
                 // Start receiving messages from the server
                 await Task.Run(ClientReceiveLoop);
             }
             catch (Exception ex)
             {
-                // Log error
                 Console.WriteLine($"Error connecting to server: {ex.Message}");
             }
         }
@@ -129,22 +124,19 @@ namespace Sp00ksy
                 string message;
                 while ((message = await clientReader.ReadLineAsync()) != null)
                 {
-                    // Handle the received message (implementation depends on Chat form)
+                    // Display the received message (implementation depends on Chat form)
                 }
             }
             catch (IOException ex)
             {
-                // Log error
                 Console.WriteLine($"I/O error in client receive loop: {ex.Message}");
             }
             catch (ObjectDisposedException ex)
             {
-                // Log error
                 Console.WriteLine($"Stream closed unexpectedly: {ex.Message}");
             }
             catch (Exception ex)
             {
-                // Log error
                 Console.WriteLine($"Error in client receive loop: {ex.Message}");
             }
         }
@@ -166,13 +158,13 @@ namespace Sp00ksy
                     string output = process.StandardOutput.ReadToEnd();
                     process.WaitForExit();
 
-                    // Display result in a UI control or handle it as needed
-                    Console.WriteLine(output); // Example: Log output
+                    // Display the open ports in a multiline TextBox or other control
+                    // Replace txtPortLog with your actual control name if needed
+                   
                 }
             }
             catch (Exception ex)
             {
-                // Log error
                 Console.WriteLine($"Error executing netstat: {ex.Message}");
             }
         }
