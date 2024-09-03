@@ -34,7 +34,14 @@ namespace Sp00ksy
                 return;
             }
 
-            labelResult.Text = "Pinging...";
+            // Initially hide the GroupBox
+            groupBoxPingResults.Visible = false;
+            labelAddress.Text = "Address:";
+            labelRoundtripTime.Text = "Roundtrip Time:";
+            labelTTL.Text = "TTL:";
+            labelBufferSize.Text = "Buffer Size:";
+            labelBufferContent.Text = "Buffer Content:";
+            labelPingSuccessful.Text = "Ping Successful:";
 
             try
             {
@@ -44,19 +51,74 @@ namespace Sp00ksy
 
                     if (reply.Status == IPStatus.Success)
                     {
-                        labelResult.Text = $"Reply from {reply.Address}: Time={reply.RoundtripTime}ms TTL={reply.Options.Ttl}";
+                        // Collecting additional information
+                        string replyAddress = reply.Address.ToString();
+                        long roundtripTime = reply.RoundtripTime;
+                        int ttl = reply.Options.Ttl;
+                        bool isPingSuccessful = reply.Status == IPStatus.Success;
+                        string buffer = reply.Buffer.Length > 0 ? BitConverter.ToString(reply.Buffer) : "No buffer";
+
+                        // Setting label texts
+                        labelAddress.Text = $"Address: {replyAddress}";
+                        labelRoundtripTime.Text = $"Roundtrip Time: {roundtripTime}ms";
+                        labelTTL.Text = $"TTL: {ttl}";
+                        labelBufferSize.Text = $"Buffer Size: {reply.Buffer.Length} bytes";
+                        labelBufferContent.Text = $"Buffer Content: {buffer}";
+                        labelPingSuccessful.Text = $"Ping Successful: {isPingSuccessful}";
+
+                        // Color coding
+                        Color textColor = isPingSuccessful ? Color.Green : Color.Red;
+                        labelAddress.ForeColor = textColor;
+                        labelRoundtripTime.ForeColor = textColor;
+                        labelTTL.ForeColor = textColor;
+                        labelBufferSize.ForeColor = textColor;
+                        labelBufferContent.ForeColor = textColor;
+                        labelPingSuccessful.ForeColor = textColor;
+
+                        // Show the GroupBox
+                        groupBoxPingResults.Visible = true;
                     }
                     else
                     {
-                        labelResult.Text = $"Ping failed: {reply.Status}";
+                        labelAddress.Text = $"Ping failed: {reply.Status}";
+                        labelRoundtripTime.Text = "";
+                        labelTTL.Text = "";
+                        labelBufferSize.Text = "";
+                        labelBufferContent.Text = "";
+                        labelPingSuccessful.Text = "";
+
+                        // Set color to red for failure
+                        Color textColor = Color.Red;
+                        labelAddress.ForeColor = textColor;
+                        labelRoundtripTime.ForeColor = textColor;
+                        labelTTL.ForeColor = textColor;
+                        labelBufferSize.ForeColor = textColor;
+                        labelBufferContent.ForeColor = textColor;
+                        labelPingSuccessful.ForeColor = textColor;
+
+                        // Show the GroupBox
+                        groupBoxPingResults.Visible = true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                labelResult.Text = $"Error: {ex.Message}";
+                labelAddress.Text = $"Error: {ex.Message}";
+                labelRoundtripTime.Text = "";
+                labelTTL.Text = "";
+                labelBufferSize.Text = "";
+                labelBufferContent.Text = "";
+                labelPingSuccessful.Text = "";
+
+                // Set color to red for error
+                Color textColor = Color.Red;
+                labelAddress.ForeColor = textColor;
+
+                // Show the GroupBox
+                groupBoxPingResults.Visible = true;
             }
         }
+
 
         private async void ButtonFetchIp_Click(object sender, EventArgs e)
         {
@@ -87,27 +149,7 @@ namespace Sp00ksy
             }
         }
 
-        private void labelResult_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void labelResult_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBoxIpAddress_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void tableLayoutPanel_Paint_1(object sender, PaintEventArgs e)
+        private void groupBoxPingResults_Enter(object sender, EventArgs e)
         {
 
         }
