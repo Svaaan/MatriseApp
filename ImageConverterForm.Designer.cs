@@ -13,7 +13,7 @@ namespace Sp00ksy
         private TableLayoutPanel tableLayoutPanel;
 
         /// <summary>
-        ///  Clean up any resources being used.
+        /// Clean up any resources being used.
         /// </summary>
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
@@ -28,12 +28,11 @@ namespace Sp00ksy
         #region Windows Form Designer generated code
 
         /// <summary>
-        ///  Required method for Designer support - do not modify
-        ///  the contents of this method with the code editor.
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ImageConverterForm));
             buttonUpload = new Button();
             buttonConvert = new Button();
             pictureBox = new PictureBox();
@@ -48,8 +47,8 @@ namespace Sp00ksy
             // 
             // buttonUpload
             // 
-            buttonUpload.BackColor = Color.Transparent;
-            buttonUpload.BackgroundImageLayout = ImageLayout.Stretch;
+            buttonUpload.BackColor = Color.Black; // Set background color to black
+            buttonUpload.ForeColor = Color.White; // Set text color to white for visibility
             buttonUpload.Font = new Font("Viner Hand ITC", 11F, FontStyle.Bold, GraphicsUnit.Point, 0);
             buttonUpload.Size = new Size(165, 60); // Reduced size by 25%
             buttonUpload.Margin = new Padding(10);
@@ -61,8 +60,8 @@ namespace Sp00ksy
             // 
             // buttonConvert
             // 
-            buttonConvert.BackColor = Color.Transparent;
-            buttonConvert.BackgroundImageLayout = ImageLayout.Stretch;
+            buttonConvert.BackColor = Color.Black; // Set background color to black
+            buttonConvert.ForeColor = Color.White; // Set text color to white for visibility
             buttonConvert.Font = new Font("Viner Hand ITC", 11F, FontStyle.Bold);
             buttonConvert.Size = new Size(165, 60); // Reduced size by 25%
             buttonConvert.Margin = new Padding(10);
@@ -74,8 +73,7 @@ namespace Sp00ksy
             // 
             // pictureBox
             // 
-            pictureBox.BackColor = Color.Transparent;
-            pictureBox.BackgroundImageLayout = ImageLayout.Stretch;
+            pictureBox.BackColor = Color.Black; // Set background color to black
             pictureBox.Size = new Size(720, 432); // Increased size by 20%
             pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
             pictureBox.TabIndex = 2;
@@ -85,8 +83,7 @@ namespace Sp00ksy
             // 
             // tableLayoutPanel
             // 
-            tableLayoutPanel.BackgroundImage = (Image)resources.GetObject("tableLayoutPanel.BackgroundImage");
-            tableLayoutPanel.BackgroundImageLayout = ImageLayout.Stretch;
+            tableLayoutPanel.BackColor = Color.Black; // Set background color to black
             tableLayoutPanel.ColumnCount = 1; // Single column layout
             tableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F)); // 100% width for single column
             tableLayoutPanel.Controls.Add(buttonUpload, 0, 0); // Place buttonUpload in first row
@@ -109,7 +106,7 @@ namespace Sp00ksy
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackgroundImageLayout = ImageLayout.Stretch;
+            BackColor = Color.Black; // Set form background color to black
             ClientSize = new Size(1136, 667);
             Controls.Add(tableLayoutPanel);
             Name = "ImageConverterForm";

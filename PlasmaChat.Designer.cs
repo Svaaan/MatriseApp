@@ -210,8 +210,8 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
-            Name = "PlasmaChat";
-            Text = "PlasmaChat";
+            Name = "Chat";
+            Text = "Chat";
             FormClosing += PlasmaChat_FormClosing;
             ResumeLayout(false);
             PerformLayout();

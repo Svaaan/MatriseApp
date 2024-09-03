@@ -40,7 +40,6 @@ namespace Sp00ksy
             labelRoundtripTime.Text = "Roundtrip Time:";
             labelTTL.Text = "TTL:";
             labelBufferSize.Text = "Buffer Size:";
-            labelBufferContent.Text = "Buffer Content:";
             labelPingSuccessful.Text = "Ping Successful:";
 
             try
@@ -57,13 +56,13 @@ namespace Sp00ksy
                         int ttl = reply.Options.Ttl;
                         bool isPingSuccessful = reply.Status == IPStatus.Success;
                         string buffer = reply.Buffer.Length > 0 ? BitConverter.ToString(reply.Buffer) : "No buffer";
+                        string addressType = reply.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork ? "IPv4" : "IPv6";
 
                         // Setting label texts
-                        labelAddress.Text = $"Address: {replyAddress}";
+                        labelAddress.Text = $"Address ({addressType}): {replyAddress}";
                         labelRoundtripTime.Text = $"Roundtrip Time: {roundtripTime}ms";
                         labelTTL.Text = $"TTL: {ttl}";
                         labelBufferSize.Text = $"Buffer Size: {reply.Buffer.Length} bytes";
-                        labelBufferContent.Text = $"Buffer Content: {buffer}";
                         labelPingSuccessful.Text = $"Ping Successful: {isPingSuccessful}";
 
                         // Color coding
@@ -72,7 +71,6 @@ namespace Sp00ksy
                         labelRoundtripTime.ForeColor = textColor;
                         labelTTL.ForeColor = textColor;
                         labelBufferSize.ForeColor = textColor;
-                        labelBufferContent.ForeColor = textColor;
                         labelPingSuccessful.ForeColor = textColor;
 
                         // Show the GroupBox
@@ -84,7 +82,6 @@ namespace Sp00ksy
                         labelRoundtripTime.Text = "";
                         labelTTL.Text = "";
                         labelBufferSize.Text = "";
-                        labelBufferContent.Text = "";
                         labelPingSuccessful.Text = "";
 
                         // Set color to red for failure
@@ -93,7 +90,6 @@ namespace Sp00ksy
                         labelRoundtripTime.ForeColor = textColor;
                         labelTTL.ForeColor = textColor;
                         labelBufferSize.ForeColor = textColor;
-                        labelBufferContent.ForeColor = textColor;
                         labelPingSuccessful.ForeColor = textColor;
 
                         // Show the GroupBox
@@ -107,7 +103,6 @@ namespace Sp00ksy
                 labelRoundtripTime.Text = "";
                 labelTTL.Text = "";
                 labelBufferSize.Text = "";
-                labelBufferContent.Text = "";
                 labelPingSuccessful.Text = "";
 
                 // Set color to red for error
