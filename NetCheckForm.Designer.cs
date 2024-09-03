@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Xml.Linq;
 
 namespace Sp00ksy
 {
-    partial class NetCheckForm
+    partial class NetCheckForm : Form
     {
         /// <summary>
         /// Required designer variable.
@@ -33,26 +32,21 @@ namespace Sp00ksy
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(NetCheckForm));
             speedTestButton = new Button();
             downloadSpeedLabel = new Label();
             uploadSpeedLabel = new Label();
             downloadProgressBar = new ProgressBar();
             uploadProgressBar = new ProgressBar();
-            numberOfTestsUpDown = new NumericUpDown(); // Add NumericUpDown control
+            numberOfTestsUpDown = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numberOfTestsUpDown).BeginInit();
             SuspendLayout();
-
-            this.MaximizeBox = false; // Disable the maximize button
-            this.FormBorderStyle = FormBorderStyle.FixedSingle;
-
             // 
             // speedTestButton
             // 
-            speedTestButton.BackColor = Color.Transparent;
-            speedTestButton.BackgroundImageLayout = ImageLayout.Stretch;
+            speedTestButton.BackColor = Color.Black;
             speedTestButton.Font = new Font("Viner Hand ITC", 15.75F, FontStyle.Bold);
-            speedTestButton.Location = new Point(447, 288);
+            speedTestButton.ForeColor = Color.White;
+            speedTestButton.Location = new Point(401, 283);
             speedTestButton.Name = "speedTestButton";
             speedTestButton.Size = new Size(244, 53);
             speedTestButton.TabIndex = 0;
@@ -63,10 +57,10 @@ namespace Sp00ksy
             // downloadSpeedLabel
             // 
             downloadSpeedLabel.AutoSize = true;
-            downloadSpeedLabel.BackColor = Color.Transparent;
+            downloadSpeedLabel.BackColor = Color.Black;
             downloadSpeedLabel.Font = new Font("Viner Hand ITC", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            downloadSpeedLabel.ForeColor = Color.Black;
-            downloadSpeedLabel.Location = new Point(432, 59);
+            downloadSpeedLabel.ForeColor = Color.White;
+            downloadSpeedLabel.Location = new Point(401, 55);
             downloadSpeedLabel.Name = "downloadSpeedLabel";
             downloadSpeedLabel.Size = new Size(290, 34);
             downloadSpeedLabel.TabIndex = 1;
@@ -75,10 +69,10 @@ namespace Sp00ksy
             // uploadSpeedLabel
             // 
             uploadSpeedLabel.AutoSize = true;
-            uploadSpeedLabel.BackColor = Color.Transparent;
+            uploadSpeedLabel.BackColor = Color.Black;
             uploadSpeedLabel.Font = new Font("Viner Hand ITC", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            uploadSpeedLabel.ForeColor = Color.Black;
-            uploadSpeedLabel.Location = new Point(432, 179);
+            uploadSpeedLabel.ForeColor = Color.White;
+            uploadSpeedLabel.Location = new Point(401, 177);
             uploadSpeedLabel.Name = "uploadSpeedLabel";
             uploadSpeedLabel.Size = new Size(259, 34);
             uploadSpeedLabel.TabIndex = 2;
@@ -94,6 +88,7 @@ namespace Sp00ksy
             // uploadProgressBar
             // 
             uploadProgressBar.BackColor = Color.Black;
+            uploadProgressBar.ForeColor = Color.White;
             uploadProgressBar.Location = new Point(344, 229);
             uploadProgressBar.Name = "uploadProgressBar";
             uploadProgressBar.Size = new Size(400, 23);
@@ -101,28 +96,28 @@ namespace Sp00ksy
             // 
             // numberOfTestsUpDown
             // 
-            numberOfTestsUpDown.Location = new Point(447, 360); // Position below the button
-            numberOfTestsUpDown.Minimum = 1;
-            numberOfTestsUpDown.Maximum = 10;
-            numberOfTestsUpDown.Value = 1;
+            numberOfTestsUpDown.Location = new Point(461, 370);
+            numberOfTestsUpDown.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            numberOfTestsUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             numberOfTestsUpDown.Name = "numberOfTestsUpDown";
-            numberOfTestsUpDown.Size = new Size(120, 20);
+            numberOfTestsUpDown.Size = new Size(120, 23);
             numberOfTestsUpDown.TabIndex = 5;
+            numberOfTestsUpDown.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // NetCheckForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Black;
-            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
-            BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1025, 487);
-            Controls.Add(numberOfTestsUpDown); // Add NumericUpDown to the form
+            Controls.Add(numberOfTestsUpDown);
             Controls.Add(speedTestButton);
             Controls.Add(downloadSpeedLabel);
             Controls.Add(uploadSpeedLabel);
             Controls.Add(downloadProgressBar);
             Controls.Add(uploadProgressBar);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
             Name = "NetCheckForm";
             Text = "Network Speed Test";
             ((System.ComponentModel.ISupportInitialize)numberOfTestsUpDown).EndInit();
@@ -138,5 +133,7 @@ namespace Sp00ksy
         private ProgressBar downloadProgressBar;
         private ProgressBar uploadProgressBar;
         private NumericUpDown numberOfTestsUpDown; // Declare NumericUpDown control
+
+
     }
 }
