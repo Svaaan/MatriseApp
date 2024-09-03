@@ -26,156 +26,155 @@
 
         private void InitializeComponent()
         {
-            this.textBoxIpAddress = new System.Windows.Forms.TextBox();
-            this.buttonPing = new System.Windows.Forms.Button();
-            this.buttonFetchIp = new System.Windows.Forms.Button();
-            this.groupBoxPingResults = new System.Windows.Forms.GroupBox();
-            this.labelPingSuccessful = new System.Windows.Forms.Label();
-            this.labelBufferSize = new System.Windows.Forms.Label();
-            this.labelTTL = new System.Windows.Forms.Label();
-            this.labelRoundtripTime = new System.Windows.Forms.Label();
-            this.labelAddress = new System.Windows.Forms.Label();
-            this.mainPanel = new System.Windows.Forms.Panel();
-            this.groupBoxPingResults.SuspendLayout();
-            this.mainPanel.SuspendLayout();
-            this.SuspendLayout();
+            textBoxIpAddress = new TextBox();
+            buttonPing = new Button();
+            buttonFetchIp = new Button();
+            groupBoxPingResults = new GroupBox();
+            labelPingSuccessful = new Label();
+            labelBufferSize = new Label();
+            labelTTL = new Label();
+            labelRoundtripTime = new Label();
+            labelAddress = new Label();
+            mainPanel = new Panel();
+            groupBoxPingResults.SuspendLayout();
+            mainPanel.SuspendLayout();
+            SuspendLayout();
             // 
             // textBoxIpAddress
             // 
-            this.textBoxIpAddress.BackColor = Color.FromArgb(30, 30, 30);
-            this.textBoxIpAddress.ForeColor = Color.White;
-            this.textBoxIpAddress.BorderStyle = BorderStyle.None;
-            this.textBoxIpAddress.Location = new System.Drawing.Point(401, 111);
-            this.textBoxIpAddress.Name = "textBoxIpAddress";
-            this.textBoxIpAddress.PlaceholderText = "Enter IP Address";
-            this.textBoxIpAddress.Size = new System.Drawing.Size(300, 23);
-            this.textBoxIpAddress.TabIndex = 0;
+            textBoxIpAddress.BackColor = Color.FromArgb(30, 30, 30);
+            textBoxIpAddress.BorderStyle = BorderStyle.None;
+            textBoxIpAddress.ForeColor = Color.White;
+            textBoxIpAddress.Location = new Point(401, 111);
+            textBoxIpAddress.Name = "textBoxIpAddress";
+            textBoxIpAddress.PlaceholderText = "Enter IP Address";
+            textBoxIpAddress.Size = new Size(300, 16);
+            textBoxIpAddress.TabIndex = 0;
             // 
             // buttonPing
             // 
-            this.buttonPing.BackColor = Color.FromArgb(50, 150, 250);
-            this.buttonPing.FlatStyle = FlatStyle.Flat;
-            this.buttonPing.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            this.buttonPing.ForeColor = Color.White;
-            this.buttonPing.Location = new System.Drawing.Point(581, 39);
-            this.buttonPing.Name = "buttonPing";
-            this.buttonPing.Size = new System.Drawing.Size(120, 40);
-            this.buttonPing.TabIndex = 2;
-            this.buttonPing.Text = "Ping";
-            this.buttonPing.UseVisualStyleBackColor = false;
-            this.buttonPing.Click += new System.EventHandler(this.ButtonPing_Click);
+            buttonPing.BackColor = Color.FromArgb(50, 150, 250);
+            buttonPing.FlatStyle = FlatStyle.Flat;
+            buttonPing.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            buttonPing.ForeColor = Color.White;
+            buttonPing.Location = new Point(581, 39);
+            buttonPing.Name = "buttonPing";
+            buttonPing.Size = new Size(120, 40);
+            buttonPing.TabIndex = 2;
+            buttonPing.Text = "Ping";
+            buttonPing.UseVisualStyleBackColor = false;
+            buttonPing.Click += ButtonPing_Click;
             // 
             // buttonFetchIp
             // 
-            this.buttonFetchIp.BackColor = Color.FromArgb(50, 150, 250);
-            this.buttonFetchIp.FlatStyle = FlatStyle.Flat;
-            this.buttonFetchIp.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            this.buttonFetchIp.ForeColor = Color.White;
-            this.buttonFetchIp.Location = new System.Drawing.Point(401, 39);
-            this.buttonFetchIp.Name = "buttonFetchIp";
-            this.buttonFetchIp.Size = new System.Drawing.Size(120, 40);
-            this.buttonFetchIp.TabIndex = 1;
-            this.buttonFetchIp.Text = "Fetch IP";
-            this.buttonFetchIp.UseVisualStyleBackColor = false;
-            this.buttonFetchIp.Click += new System.EventHandler(this.ButtonFetchIp_Click);
+            buttonFetchIp.BackColor = Color.FromArgb(50, 150, 250);
+            buttonFetchIp.FlatStyle = FlatStyle.Flat;
+            buttonFetchIp.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
+            buttonFetchIp.ForeColor = Color.White;
+            buttonFetchIp.Location = new Point(401, 39);
+            buttonFetchIp.Name = "buttonFetchIp";
+            buttonFetchIp.Size = new Size(120, 40);
+            buttonFetchIp.TabIndex = 1;
+            buttonFetchIp.Text = "Fetch IP";
+            buttonFetchIp.UseVisualStyleBackColor = false;
+            buttonFetchIp.Click += ButtonFetchIp_Click;
             // 
             // groupBoxPingResults
             // 
-            this.groupBoxPingResults.Controls.Add(this.labelPingSuccessful);
-            this.groupBoxPingResults.Controls.Add(this.labelBufferSize);
-            this.groupBoxPingResults.Controls.Add(this.labelTTL);
-            this.groupBoxPingResults.Controls.Add(this.labelRoundtripTime);
-            this.groupBoxPingResults.Controls.Add(this.labelAddress);
-            this.groupBoxPingResults.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            this.groupBoxPingResults.ForeColor = Color.White;
-            this.groupBoxPingResults.Location = new System.Drawing.Point(242, 156);
-            this.groupBoxPingResults.Name = "groupBoxPingResults";
-            this.groupBoxPingResults.Size = new System.Drawing.Size(583, 257);
-            this.groupBoxPingResults.TabIndex = 3;
-            this.groupBoxPingResults.TabStop = false;
-            this.groupBoxPingResults.Text = "Ping Results";
-            this.groupBoxPingResults.Visible = false;
+            groupBoxPingResults.Controls.Add(labelPingSuccessful);
+            groupBoxPingResults.Controls.Add(labelBufferSize);
+            groupBoxPingResults.Controls.Add(labelTTL);
+            groupBoxPingResults.Controls.Add(labelRoundtripTime);
+            groupBoxPingResults.Controls.Add(labelAddress);
+            groupBoxPingResults.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            groupBoxPingResults.ForeColor = Color.White;
+            groupBoxPingResults.Location = new Point(242, 156);
+            groupBoxPingResults.Name = "groupBoxPingResults";
+            groupBoxPingResults.Size = new Size(583, 257);
+            groupBoxPingResults.TabIndex = 3;
+            groupBoxPingResults.TabStop = false;
+            groupBoxPingResults.Text = "Ping Results";
+            groupBoxPingResults.Visible = false;
             // 
             // labelPingSuccessful
             // 
-            this.labelPingSuccessful.AutoSize = true;
-            this.labelPingSuccessful.ForeColor = Color.White;
-            this.labelPingSuccessful.Location = new System.Drawing.Point(10, 208);
-            this.labelPingSuccessful.Name = "labelPingSuccessful";
-            this.labelPingSuccessful.Size = new System.Drawing.Size(132, 21);
-            this.labelPingSuccessful.TabIndex = 5;
-            this.labelPingSuccessful.Text = "Ping Successful:";
+            labelPingSuccessful.AutoSize = true;
+            labelPingSuccessful.ForeColor = Color.White;
+            labelPingSuccessful.Location = new Point(10, 208);
+            labelPingSuccessful.Name = "labelPingSuccessful";
+            labelPingSuccessful.Size = new Size(132, 21);
+            labelPingSuccessful.TabIndex = 5;
+            labelPingSuccessful.Text = "Ping Successful:";
             // 
             // labelBufferSize
             // 
-            this.labelBufferSize.AutoSize = true;
-            this.labelBufferSize.ForeColor = Color.White;
-            this.labelBufferSize.Location = new System.Drawing.Point(11, 168);
-            this.labelBufferSize.Name = "labelBufferSize";
-            this.labelBufferSize.Size = new System.Drawing.Size(96, 21);
-            this.labelBufferSize.TabIndex = 3;
-            this.labelBufferSize.Text = "Buffer Size:";
+            labelBufferSize.AutoSize = true;
+            labelBufferSize.ForeColor = Color.White;
+            labelBufferSize.Location = new Point(11, 168);
+            labelBufferSize.Name = "labelBufferSize";
+            labelBufferSize.Size = new Size(96, 21);
+            labelBufferSize.TabIndex = 3;
+            labelBufferSize.Text = "Buffer Size:";
             // 
             // labelTTL
             // 
-            this.labelTTL.AutoSize = true;
-            this.labelTTL.ForeColor = Color.White;
-            this.labelTTL.Location = new System.Drawing.Point(11, 125);
-            this.labelTTL.Name = "labelTTL";
-            this.labelTTL.Size = new System.Drawing.Size(40, 21);
-            this.labelTTL.TabIndex = 2;
-            this.labelTTL.Text = "TTL:";
+            labelTTL.AutoSize = true;
+            labelTTL.ForeColor = Color.White;
+            labelTTL.Location = new Point(11, 125);
+            labelTTL.Name = "labelTTL";
+            labelTTL.Size = new Size(40, 21);
+            labelTTL.TabIndex = 2;
+            labelTTL.Text = "TTL:";
             // 
             // labelRoundtripTime
             // 
-            this.labelRoundtripTime.AutoSize = true;
-            this.labelRoundtripTime.ForeColor = Color.White;
-            this.labelRoundtripTime.Location = new System.Drawing.Point(10, 86);
-            this.labelRoundtripTime.Name = "labelRoundtripTime";
-            this.labelRoundtripTime.Size = new System.Drawing.Size(133, 21);
-            this.labelRoundtripTime.TabIndex = 1;
-            this.labelRoundtripTime.Text = "Roundtrip Time:";
+            labelRoundtripTime.AutoSize = true;
+            labelRoundtripTime.ForeColor = Color.White;
+            labelRoundtripTime.Location = new Point(10, 86);
+            labelRoundtripTime.Name = "labelRoundtripTime";
+            labelRoundtripTime.Size = new Size(133, 21);
+            labelRoundtripTime.TabIndex = 1;
+            labelRoundtripTime.Text = "Roundtrip Time:";
             // 
             // labelAddress
             // 
-            this.labelAddress.AutoSize = true;
-            this.labelAddress.ForeColor = Color.White;
-            this.labelAddress.Location = new System.Drawing.Point(11, 44);
-            this.labelAddress.Name = "labelAddress";
-            this.labelAddress.Size = new System.Drawing.Size(74, 21);
-            this.labelAddress.TabIndex = 0;
-            this.labelAddress.Text = "Address:";
+            labelAddress.AutoSize = true;
+            labelAddress.ForeColor = Color.White;
+            labelAddress.Location = new Point(11, 44);
+            labelAddress.Name = "labelAddress";
+            labelAddress.Size = new Size(74, 21);
+            labelAddress.TabIndex = 0;
+            labelAddress.Text = "Address:";
             // 
             // mainPanel
             // 
-            this.mainPanel.Anchor = AnchorStyles.None;
-            this.mainPanel.BackColor = Color.FromArgb(20, 20, 20);
-            this.mainPanel.Controls.Add(this.buttonFetchIp);
-            this.mainPanel.Controls.Add(this.buttonPing);
-            this.mainPanel.Controls.Add(this.textBoxIpAddress);
-            this.mainPanel.Controls.Add(this.groupBoxPingResults);
-            this.mainPanel.Location = new System.Drawing.Point(2, 3);
-            this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(1024, 472);
-            this.mainPanel.TabIndex = 0;
+            mainPanel.Anchor = AnchorStyles.None;
+            mainPanel.BackColor = Color.FromArgb(20, 20, 20);
+            mainPanel.Controls.Add(buttonFetchIp);
+            mainPanel.Controls.Add(buttonPing);
+            mainPanel.Controls.Add(textBoxIpAddress);
+            mainPanel.Controls.Add(groupBoxPingResults);
+            mainPanel.Location = new Point(2, 3);
+            mainPanel.Name = "mainPanel";
+            mainPanel.Size = new Size(1024, 472);
+            mainPanel.TabIndex = 0;
             // 
             // PingCheckForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = Color.Black;
-            this.ClientSize = new System.Drawing.Size(1025, 487);
-            this.Controls.Add(this.mainPanel);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.MaximizeBox = false;
-            this.Name = "PingCheckForm";
-            this.Text = "Check Ping";
-            this.groupBoxPingResults.ResumeLayout(false);
-            this.groupBoxPingResults.PerformLayout();
-            this.mainPanel.ResumeLayout(false);
-            this.mainPanel.PerformLayout();
-            this.ResumeLayout(false);
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Black;
+            ClientSize = new Size(1025, 487);
+            Controls.Add(mainPanel);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            Name = "PingCheckForm";
+            Text = "Ping";
+            groupBoxPingResults.ResumeLayout(false);
+            groupBoxPingResults.PerformLayout();
+            mainPanel.ResumeLayout(false);
+            mainPanel.PerformLayout();
+            ResumeLayout(false);
         }
-
     }
 }
