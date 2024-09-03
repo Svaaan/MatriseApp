@@ -13,6 +13,7 @@ namespace Sp00ksy.Services.ImageConverter
 
             using (OpenFileDialog openFileDialog = new OpenFileDialog())
             {
+                // Include AVIF in the list of supported image types
                 openFileDialog.Filter = "Image Files|*.avif;*.webp;*.png;*.jpeg;*.jpg";
                 if (openFileDialog.ShowDialog() == DialogResult.OK)
                 {

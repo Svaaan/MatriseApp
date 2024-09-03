@@ -11,7 +11,8 @@ namespace Sp00ksy.Services.ImageConverter
         {
             using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                saveFileDialog.Filter = "PNG Image|*.png|JPEG Image|*.jpg|WebP Image|*.webp|ICO Image|*.ico";
+                // Include AVIF in the list of output formats
+                saveFileDialog.Filter = "PNG Image|*.png|JPEG Image|*.jpg|WebP Image|*.webp|ICO Image|*.ico|AVIF Image|*.avif";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string savePath = saveFileDialog.FileName;
@@ -23,7 +24,7 @@ namespace Sp00ksy.Services.ImageConverter
                     }
                     else
                     {
-                        // Example: Set quality or compression level based on the format
+                        // Set quality or compression level based on the format
                         if (extension == ".jpg" || extension == ".jpeg")
                         {
                             uploadedImage.Quality = 90; // Set JPEG quality
@@ -32,7 +33,12 @@ namespace Sp00ksy.Services.ImageConverter
                         {
                             uploadedImage.Settings.SetDefine(MagickFormat.WebP, "quality", "80"); // Set WebP quality
                         }
+                        else if (extension == ".avif")
+                        {
+                            uploadedImage.Settings.SetDefine(MagickFormat.Avif, "quality", "80"); // Set AVIF quality
+                        }
 
+                        // Write the image without resizing
                         uploadedImage.Write(savePath);
                     }
 
@@ -40,6 +46,7 @@ namespace Sp00ksy.Services.ImageConverter
                 }
             }
         }
+
 
         private void SaveAsIcon(MagickImage sourceImage, string savePath)
         {
