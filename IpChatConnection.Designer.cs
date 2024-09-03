@@ -1,6 +1,6 @@
 ﻿namespace Sp00ksy
 {
-    partial class PlasmaChat
+    partial class IpChatConnection
     {
         private System.ComponentModel.IContainer components = null;
 
@@ -30,6 +30,7 @@
             labelIP = new Label();
             labelPort = new Label();
             labelNickname = new Label(); // Add this line
+
             SuspendLayout();
             // 
             // txtChatLog
@@ -122,28 +123,8 @@
             btnShowPorts.Text = "Show Open Ports";
             btnShowPorts.UseVisualStyleBackColor = true;
             btnShowPorts.Click += btnShowPorts_Click;
-            // 
-            // btnSaveLogs
-            // 
-            btnSaveLogs.Location = new Point(548, 369);
-            btnSaveLogs.Margin = new Padding(4, 3, 4, 3);
-            btnSaveLogs.Name = "btnSaveLogs";
-            btnSaveLogs.Size = new Size(117, 27);
-            btnSaveLogs.TabIndex = 8;
-            btnSaveLogs.Text = "Save Logs";
-            btnSaveLogs.UseVisualStyleBackColor = true;
-            btnSaveLogs.Click += btnSaveLogs_Click;
-            // 
-            // btnClearLogs
-            // 
-            btnClearLogs.Location = new Point(548, 404);
-            btnClearLogs.Margin = new Padding(4, 3, 4, 3);
-            btnClearLogs.Name = "btnClearLogs";
-            btnClearLogs.Size = new Size(117, 27);
-            btnClearLogs.TabIndex = 9;
-            btnClearLogs.Text = "Clear Logs";
-            btnClearLogs.UseVisualStyleBackColor = true;
-            btnClearLogs.Click += btnClearLogs_Click;
+      
+   
             // 
             // btnUpdateNickname
             // 
@@ -186,7 +167,7 @@
             labelNickname.TabIndex = 14; // Update TabIndex
             labelNickname.Text = "Nickname"; // Add this line
             // 
-            // PlasmaChat
+            // IpChatConnection
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -210,9 +191,8 @@
             FormBorderStyle = FormBorderStyle.FixedSingle;
             Margin = new Padding(4, 3, 4, 3);
             MaximizeBox = false;
-            Name = "Chat";
+            Name = "IpChatConnection";
             Text = "Chat";
-            FormClosing += PlasmaChat_FormClosing;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -221,16 +201,16 @@
         private System.Windows.Forms.TextBox txtIPAddress;
         private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.TextBox txtMessage;
-        private System.Windows.Forms.TextBox txtNickname; 
+        private System.Windows.Forms.TextBox txtNickname;
         private System.Windows.Forms.Button btnStartServer;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Button btnSendMessage;
         private System.Windows.Forms.Button btnShowPorts;
         private System.Windows.Forms.Button btnSaveLogs;
         private System.Windows.Forms.Button btnClearLogs;
-        private System.Windows.Forms.Button btnUpdateNickname; 
+        private System.Windows.Forms.Button btnUpdateNickname;
         private System.Windows.Forms.Label labelIP;
         private System.Windows.Forms.Label labelPort;
-        private System.Windows.Forms.Label labelNickname; 
+        private System.Windows.Forms.Label labelNickname;
     }
 }

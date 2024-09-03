@@ -1,9 +1,13 @@
-﻿using System.Net.Sockets;
+﻿using System;
+using System.IO;
 using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Sp00ksy
 {
-    public partial class PlasmaChat : Form
+    public partial class IpChatConnection : Form
     {
         private TcpClient client;
         private TcpListener server;
@@ -14,17 +18,11 @@ namespace Sp00ksy
         private NetworkStream serverClientStream;
         private StreamWriter serverClientWriter;
         private readonly object streamLock = new object();
-        private System.Windows.Forms.Timer transitionTimer; // Explicitly use System.Windows.Forms.Timer
         private string nickname = "Guest"; // Default nickname
 
-        public PlasmaChat()
+        public IpChatConnection()
         {
             InitializeComponent();
-        }
-
-        private void ClearLogs()
-        {
-            txtChatLog.Clear();
         }
 
         private async void btnStartServer_Click(object sender, EventArgs e)
@@ -46,7 +44,22 @@ namespace Sp00ksy
                 LogMessage($"Initializing server on port {port}...");
                 server.Start(); // Start listening for incoming connections
                 LogMessage("Server started. Waiting for connection...");
-                await Task.Run(ServerListenLoop); // Run the server loop in a separate task
+
+                // Start a task to listen for connections
+                await Task.Run(async () =>
+                {
+                    serverClient = await server.AcceptTcpClientAsync();
+                    serverClientStream = serverClient.GetStream();
+
+                    // Open the Chat form and pass the server's client stream
+                    Invoke(new Action(() => {
+                        var chatForm = new Chat(serverClientStream);
+                        chatForm.Show();
+                        this.Hide(); // Optionally hide the current form
+                    }));
+
+                    await Task.Run(() => HandleServerClientCommunication());
+                });
             }
             catch (Exception ex)
             {
@@ -76,7 +89,13 @@ namespace Sp00ksy
                 clientStream = client.GetStream();
                 clientWriter = new StreamWriter(clientStream) { AutoFlush = true };
                 clientReader = new StreamReader(clientStream);
-                LogMessage($"Connected to server at {ipAddress}:{port}."); // Log connection details
+                LogMessage($"Connected to server at {ipAddress}:{port}.");
+
+                // Open the Chat form and pass the client stream
+                var chatForm = new Chat(clientStream);
+                chatForm.Show();
+                this.Hide(); // Optionally hide the current form
+
                 await Task.Run(ClientReceiveLoop);
             }
             catch (Exception ex)
@@ -85,43 +104,30 @@ namespace Sp00ksy
             }
         }
 
-        private async Task ServerListenLoop()
+        private async Task HandleServerClientCommunication()
         {
-            while (true)
+            // Method to handle communication with connected client
+            try
             {
-                try
+                using (var reader = new StreamReader(serverClientStream))
+                using (var writer = new StreamWriter(serverClientStream) { AutoFlush = true })
                 {
-                    serverClient = await server.AcceptTcpClientAsync();
-                    var remoteEndPoint = (IPEndPoint)serverClient.Client.RemoteEndPoint;
-                    string clientIp = remoteEndPoint.Address.ToString();
-                    int clientPort = remoteEndPoint.Port;
-                    serverClientStream = serverClient.GetStream();
-                    serverClientWriter = new StreamWriter(serverClientStream) { AutoFlush = true };
-                    var serverClientReader = new StreamReader(serverClientStream);
-                    LogMessage($"Client connected from {clientIp}:{clientPort}.");
-
-                    // Run client handling in a separate task
-                    _ = Task.Run(async () =>
+                    string message;
+                    while ((message = await reader.ReadLineAsync()) != null)
                     {
-                        string message;
-                        while ((message = await serverClientReader.ReadLineAsync()) != null)
-                        {
-                            LogMessage($"{nickname}: {message}"); // Log received message from client with nickname
-                            // Echo message back to client
-                            await serverClientWriter.WriteLineAsync($"{nickname}: {message}");
-                        }
-                        LogMessage($"Client from {clientIp}:{clientPort} disconnected.");
-                        serverClient.Close();
-                    });
+                        LogMessage($"{nickname}: {message}"); // Log received message from client with nickname
+                        // Echo message back to client
+                        await writer.WriteLineAsync($"{nickname}: {message}");
+                    }
                 }
-                catch (IOException ex)
-                {
-                    LogMessage($"I/O error in server loop: {ex.Message}", "ERROR");
-                }
-                catch (Exception ex)
-                {
-                    LogMessage($"Error in server loop: {ex.Message}", "ERROR");
-                }
+            }
+            catch (IOException ex)
+            {
+                LogMessage($"I/O error in server loop: {ex.Message}", "ERROR");
+            }
+            catch (Exception ex)
+            {
+                LogMessage($"Error in server loop: {ex.Message}", "ERROR");
             }
         }
 
@@ -194,28 +200,6 @@ namespace Sp00ksy
             txtChatLog.AppendText($"[{timestamp}] [{level}] {message}{Environment.NewLine}");
         }
 
-        private void PlasmaChat_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            try
-            {
-                if (client != null)
-                {
-                    LogMessage("You have disconnected from the server.");
-                    clientStream?.Close();
-                    client.Close();
-                }
-                if (server != null)
-                {
-                    LogMessage("Server is shutting down.");
-                    server.Stop(); // Ensure server is properly stopped
-                }
-            }
-            catch (Exception ex)
-            {
-                LogMessage($"Error closing connections: {ex.Message}", "ERROR");
-            }
-        }
-
         private void btnShowPorts_Click(object sender, EventArgs e)
         {
             try
@@ -240,36 +224,6 @@ namespace Sp00ksy
             {
                 MessageBox.Show($"Error executing netstat: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-        }
-
-        private void SaveLogsToFile()
-        {
-            try
-            {
-                // Set the file path and name
-                string fileName = $"ChatLog_{DateTime.Now:yyyyMMdd_HHmmss}.txt";
-                string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName);
-
-                // Write the log content to the file
-                File.WriteAllText(filePath, txtChatLog.Text);
-
-                // Inform the user
-                MessageBox.Show($"Chat log saved to {filePath}", "Log Saved", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error saving log: {ex.Message}", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-        }
-
-        private void btnSaveLogs_Click(object sender, EventArgs e)
-        {
-            SaveLogsToFile();
-        }
-
-        private void btnClearLogs_Click(object sender, EventArgs e)
-        {
-            ClearLogs();
         }
 
         private void btnUpdateNickname_Click(object sender, EventArgs e)

@@ -36,7 +36,7 @@ namespace Sp00ksy
         private void btnOpenChat_Click(object sender, EventArgs e)
         {
             // Open the PlasmaChat form
-            PlasmaChat chatForm = new PlasmaChat();
+            IpChatConnection chatForm = new IpChatConnection();
             chatForm.ShowDialog();
         }
 
