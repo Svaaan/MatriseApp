@@ -23,6 +23,7 @@ namespace Sp00ksy
         private readonly object streamLock = new object();
         private System.Windows.Forms.Timer transitionTimer; // Explicitly use System.Windows.Forms.Timer
         private MatrixRain matrixRain;
+        private string nickname = "Guest"; // Default nickname
 
         public PlasmaChat()
         {
@@ -83,10 +84,16 @@ namespace Sp00ksy
 
             try
             {
+                if (server != null)
+                {
+                    server.Stop(); // Ensure any existing server is stopped before starting a new one
+                }
+
                 server = new TcpListener(IPAddress.Any, port);
-                server.Start();
+                LogMessage($"Initializing server on port {port}...");
+                server.Start(); // Start listening for incoming connections
                 LogMessage("Server started. Waiting for connection...");
-                await Task.Run(ServerListenLoop);
+                await Task.Run(ServerListenLoop); // Run the server loop in a separate task
             }
             catch (Exception ex)
             {
@@ -146,10 +153,9 @@ namespace Sp00ksy
                         string message;
                         while ((message = await serverClientReader.ReadLineAsync()) != null)
                         {
-                            LogMessage($"Client: {message}");
-                            // Echo message back to client and log it
-                            await serverClientWriter.WriteLineAsync($"Server received: {message}");
-                            LogMessage($"Server sent: Server received: {message}");
+                            LogMessage($"{nickname}: {message}"); // Log received message from client with nickname
+                            // Echo message back to client
+                            await serverClientWriter.WriteLineAsync($"{nickname}: {message}");
                         }
                         LogMessage("Client disconnected.");
                         serverClient.Close();
@@ -173,8 +179,7 @@ namespace Sp00ksy
                 string message;
                 while ((message = await clientReader.ReadLineAsync()) != null)
                 {
-                    LogMessage($"Server: {message}");
-                    LogMessage("Client received message.");
+                    LogMessage(message); // Log received message from server
                 }
             }
             catch (IOException ex)
@@ -204,14 +209,14 @@ namespace Sp00ksy
             {
                 if (clientWriter != null)
                 {
-                    await clientWriter.WriteLineAsync(message);
-                    LogMessage($"You: {message}"); // Keep this log to show the message was sent
+                    await clientWriter.WriteLineAsync($"{nickname}: {message}");
+                    LogMessage($"You: {message}"); // Log sent message with nickname
                     txtMessage.Clear();
                 }
                 else if (serverClientWriter != null)
                 {
-                    await serverClientWriter.WriteLineAsync(message);
-                    LogMessage($"You (Server Client): {message}"); // Keep this log to show the message was sent
+                    await serverClientWriter.WriteLineAsync($"{nickname}: {message}");
+                    LogMessage($"You (Server Client): {message}"); // Log sent message with nickname
                     txtMessage.Clear();
                 }
                 else
@@ -249,7 +254,7 @@ namespace Sp00ksy
                 if (server != null)
                 {
                     LogMessage("Server is shutting down.");
-                    server.Stop();
+                    server.Stop(); // Ensure server is properly stopped
                 }
             }
             catch (Exception ex)
@@ -312,6 +317,21 @@ namespace Sp00ksy
         private void btnClearLogs_Click(object sender, EventArgs e)
         {
             ClearLogs();
+        }
+
+        // Add a method to update the nickname
+        private void btnUpdateNickname_Click(object sender, EventArgs e)
+        {
+            string newNickname = txtNickname.Text.Trim();
+            if (!string.IsNullOrWhiteSpace(newNickname))
+            {
+                nickname = newNickname;
+                LogMessage($"Nickname updated to: {nickname}");
+            }
+            else
+            {
+                LogMessage("Nickname cannot be empty.", "ERROR");
+            }
         }
     }
 }
