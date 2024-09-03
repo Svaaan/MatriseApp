@@ -16,13 +16,26 @@ namespace Sp00ksy
         private StreamReader clientReader;
         private TcpClient serverClient;
         private NetworkStream serverClientStream;
+        private bool isServerRunning = false;
 
         public IpChatConnection()
         {
             InitializeComponent();
         }
 
-        private async void btnStartServer_Click(object sender, EventArgs e)
+        private async void btnStartConnect_Click(object sender, EventArgs e)
+        {
+            if (isServerRunning)
+            {
+                await ConnectToServerAsync();
+            }
+            else
+            {
+                await StartServerAsync();
+            }
+        }
+
+        private async Task StartServerAsync()
         {
             if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
             {
@@ -40,6 +53,9 @@ namespace Sp00ksy
                 server = new TcpListener(IPAddress.Any, port);
                 server.Start(); // Start listening for incoming connections
                 MessageBox.Show($"Server started on port {port}. Waiting for connection...", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                isServerRunning = true;
+                btnStartConnect.Text = "Connect";
 
                 // Start a task to listen for connections
                 await Task.Run(async () =>
@@ -61,7 +77,7 @@ namespace Sp00ksy
             }
         }
 
-        private async void btnConnect_Click(object sender, EventArgs e)
+        private async Task ConnectToServerAsync()
         {
             string ipAddress = txtIPAddress.Text;
             if (!IPAddress.TryParse(ipAddress, out _))
