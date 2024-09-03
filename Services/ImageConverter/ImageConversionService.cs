@@ -15,13 +15,24 @@ namespace Sp00ksy.Services.ImageConverter
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     string savePath = saveFileDialog.FileName;
+                    string extension = Path.GetExtension(savePath).ToLower();
 
-                    if (Path.GetExtension(savePath).ToLower() == ".ico")
+                    if (extension == ".ico")
                     {
                         SaveAsIcon(uploadedImage, savePath);
                     }
                     else
                     {
+                        // Example: Set quality or compression level based on the format
+                        if (extension == ".jpg" || extension == ".jpeg")
+                        {
+                            uploadedImage.Quality = 90; // Set JPEG quality
+                        }
+                        else if (extension == ".webp")
+                        {
+                            uploadedImage.Settings.SetDefine(MagickFormat.WebP, "quality", "80"); // Set WebP quality
+                        }
+
                         uploadedImage.Write(savePath);
                     }
 
@@ -34,11 +45,13 @@ namespace Sp00ksy.Services.ImageConverter
         {
             using (var iconCollection = new MagickImageCollection())
             {
-                AddImageToIconCollection(sourceImage, iconCollection, 16);
-                AddImageToIconCollection(sourceImage, iconCollection, 32);
-                AddImageToIconCollection(sourceImage, iconCollection, 48);
-                AddImageToIconCollection(sourceImage, iconCollection, 64);
-                AddImageToIconCollection(sourceImage, iconCollection, 128);
+                // Specify sizes needed for ICO format
+                int[] sizes = { 16, 32, 48, 64, 128, 256 }; // Adjust sizes as needed
+
+                foreach (var size in sizes)
+                {
+                    AddImageToIconCollection(sourceImage, iconCollection, size);
+                }
 
                 iconCollection.Write(savePath);
             }
@@ -47,7 +60,10 @@ namespace Sp00ksy.Services.ImageConverter
         private void AddImageToIconCollection(MagickImage sourceImage, MagickImageCollection iconCollection, int size)
         {
             var iconImage = sourceImage.Clone();
+
+            // Only resize for specific sizes in ICO format
             iconImage.Resize(size, size);
+
             iconCollection.Add(iconImage);
         }
     }

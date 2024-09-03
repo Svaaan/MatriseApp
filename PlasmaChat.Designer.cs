@@ -221,16 +221,16 @@
         private System.Windows.Forms.TextBox txtIPAddress;
         private System.Windows.Forms.TextBox txtPort;
         private System.Windows.Forms.TextBox txtMessage;
-        private System.Windows.Forms.TextBox txtNickname; // Add this line
+        private System.Windows.Forms.TextBox txtNickname; 
         private System.Windows.Forms.Button btnStartServer;
         private System.Windows.Forms.Button btnConnect;
         private System.Windows.Forms.Button btnSendMessage;
         private System.Windows.Forms.Button btnShowPorts;
         private System.Windows.Forms.Button btnSaveLogs;
         private System.Windows.Forms.Button btnClearLogs;
-        private System.Windows.Forms.Button btnUpdateNickname; // Add this line
+        private System.Windows.Forms.Button btnUpdateNickname; 
         private System.Windows.Forms.Label labelIP;
         private System.Windows.Forms.Label labelPort;
-        private System.Windows.Forms.Label labelNickname; // Add this line
+        private System.Windows.Forms.Label labelNickname; 
     }
 }

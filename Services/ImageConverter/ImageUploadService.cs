@@ -18,23 +18,20 @@ namespace Sp00ksy.Services.ImageConverter
                 {
                     string filePath = openFileDialog.FileName;
 
-                    var settings = new MagickReadSettings
-                    {
-                        Width = 1024,
-                        Height = 1024
-                    };
+                    // Load the image without resizing to retain original dimensions
+                    var uploadedImage = new MagickImage(filePath);
 
-                    var uploadedImage = new MagickImage(filePath, settings);
-
-                    // Resize to a reasonable preview size
-                    uploadedImage.Resize(new MagickGeometry(256, 256)
+                    // Create a separate resized copy for preview
+                    var previewImageCopy = uploadedImage.Clone();
+                    previewImageCopy.Resize(new MagickGeometry(256, 256)
                     {
                         IgnoreAspectRatio = false
                     });
 
-                    // Convert to Bitmap for preview
-                    previewImage = uploadedImage.ToBitmap();
+                    // Convert the resized copy to Bitmap for preview
+                    previewImage = previewImageCopy.ToBitmap();
 
+                    // Return the original image without modification
                     return uploadedImage;
                 }
             }

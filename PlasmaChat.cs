@@ -84,10 +84,16 @@ namespace Sp00ksy
 
             try
             {
+                if (server != null)
+                {
+                    server.Stop(); // Ensure any existing server is stopped before starting a new one
+                }
+
                 server = new TcpListener(IPAddress.Any, port);
-                server.Start();
+                LogMessage($"Initializing server on port {port}...");
+                server.Start(); // Start listening for incoming connections
                 LogMessage("Server started. Waiting for connection...");
-                await Task.Run(ServerListenLoop);
+                await Task.Run(ServerListenLoop); // Run the server loop in a separate task
             }
             catch (Exception ex)
             {
@@ -248,7 +254,7 @@ namespace Sp00ksy
                 if (server != null)
                 {
                     LogMessage("Server is shutting down.");
-                    server.Stop();
+                    server.Stop(); // Ensure server is properly stopped
                 }
             }
             catch (Exception ex)
