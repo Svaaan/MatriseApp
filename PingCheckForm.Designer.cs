@@ -1,8 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-
-namespace Sp00ksy
+﻿namespace Sp00ksy
 {
     partial class PingCheckForm : Form
     {
@@ -19,10 +15,6 @@ namespace Sp00ksy
         private Label labelPingSuccessful;
         private Panel mainPanel;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -32,12 +24,6 @@ namespace Sp00ksy
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
             textBoxIpAddress = new TextBox();
@@ -56,15 +42,19 @@ namespace Sp00ksy
             // 
             // textBoxIpAddress
             // 
+            textBoxIpAddress.BackColor = Color.FromArgb(30, 30, 30);
+            textBoxIpAddress.BorderStyle = BorderStyle.None;
+            textBoxIpAddress.ForeColor = Color.White;
             textBoxIpAddress.Location = new Point(401, 111);
             textBoxIpAddress.Name = "textBoxIpAddress";
             textBoxIpAddress.PlaceholderText = "Enter IP Address";
-            textBoxIpAddress.Size = new Size(300, 23);
+            textBoxIpAddress.Size = new Size(300, 16);
             textBoxIpAddress.TabIndex = 0;
             // 
             // buttonPing
             // 
-            buttonPing.BackColor = Color.Black;
+            buttonPing.BackColor = Color.FromArgb(50, 150, 250);
+            buttonPing.FlatStyle = FlatStyle.Flat;
             buttonPing.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonPing.ForeColor = Color.White;
             buttonPing.Location = new Point(581, 39);
@@ -73,10 +63,12 @@ namespace Sp00ksy
             buttonPing.TabIndex = 2;
             buttonPing.Text = "Ping";
             buttonPing.UseVisualStyleBackColor = false;
+            buttonPing.Click += ButtonPing_Click;
             // 
             // buttonFetchIp
             // 
-            buttonFetchIp.BackColor = Color.Black;
+            buttonFetchIp.BackColor = Color.FromArgb(50, 150, 250);
+            buttonFetchIp.FlatStyle = FlatStyle.Flat;
             buttonFetchIp.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
             buttonFetchIp.ForeColor = Color.White;
             buttonFetchIp.Location = new Point(401, 39);
@@ -85,6 +77,7 @@ namespace Sp00ksy
             buttonFetchIp.TabIndex = 1;
             buttonFetchIp.Text = "Fetch IP";
             buttonFetchIp.UseVisualStyleBackColor = false;
+            buttonFetchIp.Click += ButtonFetchIp_Click;
             // 
             // groupBoxPingResults
             // 
@@ -93,7 +86,7 @@ namespace Sp00ksy
             groupBoxPingResults.Controls.Add(labelTTL);
             groupBoxPingResults.Controls.Add(labelRoundtripTime);
             groupBoxPingResults.Controls.Add(labelAddress);
-            groupBoxPingResults.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            groupBoxPingResults.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             groupBoxPingResults.ForeColor = Color.White;
             groupBoxPingResults.Location = new Point(242, 156);
             groupBoxPingResults.Name = "groupBoxPingResults";
@@ -156,7 +149,7 @@ namespace Sp00ksy
             // mainPanel
             // 
             mainPanel.Anchor = AnchorStyles.None;
-            mainPanel.BackColor = Color.Black;
+            mainPanel.BackColor = Color.FromArgb(20, 20, 20);
             mainPanel.Controls.Add(buttonFetchIp);
             mainPanel.Controls.Add(buttonPing);
             mainPanel.Controls.Add(textBoxIpAddress);
@@ -176,14 +169,12 @@ namespace Sp00ksy
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
             Name = "PingCheckForm";
-            Text = "Check Ping";
+            Text = "Ping";
             groupBoxPingResults.ResumeLayout(false);
             groupBoxPingResults.PerformLayout();
             mainPanel.ResumeLayout(false);
             mainPanel.PerformLayout();
             ResumeLayout(false);
         }
-
-        #endregion
     }
 }

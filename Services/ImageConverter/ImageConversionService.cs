@@ -9,43 +9,56 @@ namespace Sp00ksy.Services.ImageConverter
     {
         public void ConvertAndSaveImage(MagickImage uploadedImage)
         {
-            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
+            if (uploadedImage == null)
             {
-                // Include AVIF in the list of output formats
-                saveFileDialog.Filter = "PNG Image|*.png|JPEG Image|*.jpg|WebP Image|*.webp|ICO Image|*.ico|AVIF Image|*.avif";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                MessageBox.Show("No image has been uploaded for conversion.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                using (SaveFileDialog saveFileDialog = new SaveFileDialog())
                 {
-                    string savePath = saveFileDialog.FileName;
-                    string extension = Path.GetExtension(savePath).ToLower();
-
-                    if (extension == ".ico")
+                    saveFileDialog.Filter = "PNG Image|*.png|JPEG Image|*.jpg|WebP Image|*.webp|ICO Image|*.ico|AVIF Image|*.avif";
+                    if (saveFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        SaveAsIcon(uploadedImage, savePath);
-                    }
-                    else
-                    {
-                        // Set quality or compression level based on the format
-                        if (extension == ".jpg" || extension == ".jpeg")
+                        string savePath = saveFileDialog.FileName;
+                        string extension = Path.GetExtension(savePath).ToLower();
+
+                        if (extension == ".ico")
                         {
-                            uploadedImage.Quality = 90; // Set JPEG quality
+                            SaveAsIcon(uploadedImage, savePath);
                         }
-                        else if (extension == ".webp")
+                        else
                         {
-                            uploadedImage.Settings.SetDefine(MagickFormat.WebP, "quality", "80"); // Set WebP quality
-                        }
-                        else if (extension == ".avif")
-                        {
-                            uploadedImage.Settings.SetDefine(MagickFormat.Avif, "quality", "80"); // Set AVIF quality
+                            // Set quality or compression level based on the format
+                            if (extension == ".jpg" || extension == ".jpeg")
+                            {
+                                uploadedImage.Quality = 90; // Set JPEG quality
+                            }
+                            else if (extension == ".webp")
+                            {
+                                uploadedImage.Settings.SetDefine(MagickFormat.WebP, "quality", "80"); // Set WebP quality
+                            }
+                            else if (extension == ".avif")
+                            {
+                                uploadedImage.Settings.SetDefine(MagickFormat.Avif, "quality", "80"); // Set AVIF quality
+                            }
+
+                            // Write the image without resizing
+                            uploadedImage.Write(savePath);
                         }
 
-                        // Write the image without resizing
-                        uploadedImage.Write(savePath);
+                        MessageBox.Show("Image converted and saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-
-                    MessageBox.Show("Image converted and saved successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred during image conversion: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
+
 
 
         private void SaveAsIcon(MagickImage sourceImage, string savePath)

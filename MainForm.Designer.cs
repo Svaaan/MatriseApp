@@ -1,16 +1,16 @@
 ﻿namespace Sp00ksy
 {
-    partial class MainForm
+    partial class MainForm : Form
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        private Button buttonImageConverter;
+        private Button buttonNetCheck;
+        private Button buttonPingCheck;
+        private Button btnOpenChat;
+        private TableLayoutPanel tableLayoutPanel1;
+        private System.ComponentModel.BackgroundWorker backgroundWorker1;
+
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
@@ -20,73 +20,89 @@
             base.Dispose(disposing);
         }
 
-        #region Windows Form Designer generated code
-
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            button1 = new Button();
-            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
-            button2 = new Button();
-            button3 = new Button();
-            tableLayoutPanel1 = new TableLayoutPanel();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            buttonImageConverter = new Button();
+            buttonNetCheck = new Button();
+            buttonPingCheck = new Button();
             btnOpenChat = new Button();
+            tableLayoutPanel1 = new TableLayoutPanel();
+            backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
-            // button1
+            // buttonImageConverter
             // 
-            button1.BackColor = Color.Black;
-            button1.Dock = DockStyle.Fill;
-            button1.ForeColor = Color.White; // Changed to White for visibility
-            button1.Location = new Point(3, 3);
-            button1.Name = "button1";
-            button1.Size = new Size(250, 34);
-            button1.TabIndex = 0;
-            button1.Text = "Image Converter";
-            button1.UseVisualStyleBackColor = false;
-            button1.Click += ImageConverter_Click;
+            buttonImageConverter.BackColor = Color.FromArgb(40, 40, 40);
+            buttonImageConverter.Dock = DockStyle.Fill;
+            buttonImageConverter.FlatStyle = FlatStyle.Flat;
+            buttonImageConverter.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonImageConverter.ForeColor = Color.White;
+            buttonImageConverter.Location = new Point(3, 3);
+            buttonImageConverter.Name = "buttonImageConverter";
+            buttonImageConverter.Size = new Size(250, 34);
+            buttonImageConverter.TabIndex = 0;
+            buttonImageConverter.Text = "Image Converter";
+            buttonImageConverter.UseVisualStyleBackColor = false;
+            buttonImageConverter.Click += ImageConverter_Click;
             // 
-            // button2
+            // buttonNetCheck
             // 
-            button2.BackColor = Color.Black;
-            button2.Dock = DockStyle.Fill;
-            button2.ForeColor = Color.White; // Changed to White for visibility
-            button2.Location = new Point(259, 3);
-            button2.Name = "button2";
-            button2.Size = new Size(250, 34);
-            button2.TabIndex = 1;
-            button2.Text = "Net check";
-            button2.UseVisualStyleBackColor = false;
-            button2.Click += NetCheck_Click;
+            buttonNetCheck.BackColor = Color.FromArgb(40, 40, 40);
+            buttonNetCheck.Dock = DockStyle.Fill;
+            buttonNetCheck.FlatStyle = FlatStyle.Flat;
+            buttonNetCheck.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonNetCheck.ForeColor = Color.White;
+            buttonNetCheck.Location = new Point(259, 3);
+            buttonNetCheck.Name = "buttonNetCheck";
+            buttonNetCheck.Size = new Size(250, 34);
+            buttonNetCheck.TabIndex = 1;
+            buttonNetCheck.Text = "Net Check";
+            buttonNetCheck.UseVisualStyleBackColor = false;
+            buttonNetCheck.Click += NetCheck_Click;
             // 
-            // button3
+            // buttonPingCheck
             // 
-            button3.BackColor = Color.Black;
-            button3.Dock = DockStyle.Fill;
-            button3.ForeColor = Color.White; // Changed to White for visibility
-            button3.Location = new Point(515, 3);
-            button3.Name = "button3";
-            button3.Size = new Size(250, 34);
-            button3.TabIndex = 2;
-            button3.Text = "Check ping";
-            button3.UseVisualStyleBackColor = false;
-            button3.Click += PingCheck_Click;
+            buttonPingCheck.BackColor = Color.FromArgb(40, 40, 40);
+            buttonPingCheck.Dock = DockStyle.Fill;
+            buttonPingCheck.FlatStyle = FlatStyle.Flat;
+            buttonPingCheck.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonPingCheck.ForeColor = Color.White;
+            buttonPingCheck.Location = new Point(515, 3);
+            buttonPingCheck.Name = "buttonPingCheck";
+            buttonPingCheck.Size = new Size(250, 34);
+            buttonPingCheck.TabIndex = 2;
+            buttonPingCheck.Text = "Check Ping";
+            buttonPingCheck.UseVisualStyleBackColor = false;
+            buttonPingCheck.Click += PingCheck_Click;
+            // 
+            // btnOpenChat
+            // 
+            btnOpenChat.BackColor = Color.FromArgb(40, 40, 40);
+            btnOpenChat.Dock = DockStyle.Fill;
+            btnOpenChat.FlatStyle = FlatStyle.Flat;
+            btnOpenChat.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnOpenChat.ForeColor = Color.White;
+            btnOpenChat.Location = new Point(771, 3);
+            btnOpenChat.Name = "btnOpenChat";
+            btnOpenChat.Size = new Size(251, 34);
+            btnOpenChat.TabIndex = 3;
+            btnOpenChat.Text = "Chat";
+            btnOpenChat.UseVisualStyleBackColor = false;
+            btnOpenChat.Click += btnOpenChat_Click;
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.BackColor = Color.Transparent;
+            tableLayoutPanel1.BackColor = Color.Black;
             tableLayoutPanel1.ColumnCount = 4;
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
-            tableLayoutPanel1.Controls.Add(button1, 0, 0);
-            tableLayoutPanel1.Controls.Add(button2, 1, 0);
-            tableLayoutPanel1.Controls.Add(button3, 2, 0);
+            tableLayoutPanel1.Controls.Add(buttonImageConverter, 0, 0);
+            tableLayoutPanel1.Controls.Add(buttonNetCheck, 1, 0);
+            tableLayoutPanel1.Controls.Add(buttonPingCheck, 2, 0);
             tableLayoutPanel1.Controls.Add(btnOpenChat, 3, 0);
             tableLayoutPanel1.Dock = DockStyle.Top;
             tableLayoutPanel1.Location = new Point(0, 0);
@@ -96,24 +112,13 @@
             tableLayoutPanel1.Size = new Size(1025, 40);
             tableLayoutPanel1.TabIndex = 0;
             // 
-            // btnOpenChat
-            // 
-            btnOpenChat.BackColor = Color.Black;
-            btnOpenChat.Dock = DockStyle.Fill;
-            btnOpenChat.ForeColor = Color.White; // Changed to White for visibility
-            btnOpenChat.Location = new Point(771, 3);
-            btnOpenChat.Name = "btnOpenChat";
-            btnOpenChat.Size = new Size(251, 34);
-            btnOpenChat.TabIndex = 3;
-            btnOpenChat.Text = "Chat";
-            btnOpenChat.UseVisualStyleBackColor = false;
-            btnOpenChat.Click += btnOpenChat_Click;
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Black; // Changed to Black for the form background
+            BackColor = Color.Black;
+            BackgroundImage = (Image)resources.GetObject("$this.BackgroundImage");
+            BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(1025, 487);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = FormBorderStyle.FixedSingle;
@@ -124,14 +129,5 @@
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }
-
-        #endregion
-
-        private System.Windows.Forms.Button btnOpenChat; // Declare btnOpenChat here
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.ComponentModel.BackgroundWorker backgroundWorker1;
     }
 }
