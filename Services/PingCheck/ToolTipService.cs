@@ -1,6 +1,6 @@
 ﻿using System.Windows.Forms;
 
-namespace Sp00ksy.Services.PingCheck
+namespace Matrise.Services.PingCheck
 {
     public class ToolTipService
     {

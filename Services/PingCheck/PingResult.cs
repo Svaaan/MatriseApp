@@ -1,6 +1,6 @@
 ﻿using System.Net.NetworkInformation;
 
-namespace Sp00ksy.Services.PingCheck
+namespace Matrise.Services.PingCheck
 {
     public class PingResult
     {

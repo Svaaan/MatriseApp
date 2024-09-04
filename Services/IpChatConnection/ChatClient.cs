@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 //Client side logic
-namespace Sp00ksy.Services.Chat
+namespace Matrise.Services.Chat
 {
     public class ChatClient
     {

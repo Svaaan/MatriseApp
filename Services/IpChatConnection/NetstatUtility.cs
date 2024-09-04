@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 
-namespace Sp00ksy.Services.Chat
+namespace Matrise.Services.Chat
 {
     public static class NetstatUtility
     {

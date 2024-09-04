@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sp00ksy
+namespace Matrise
 {
     public partial class IpChatConnection : Form
     {

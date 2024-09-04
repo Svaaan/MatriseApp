@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Sp00ksy.Services.NetCheck
+namespace Matrise.Services.NetCheck
 {
     public class SpeedTestService
     {

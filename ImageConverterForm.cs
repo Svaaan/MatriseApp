@@ -2,9 +2,9 @@
 using System.Drawing;
 using System.Windows.Forms;
 using ImageMagick;
-using Sp00ksy.Services.ImageConverter;
+using Matrise.Services.ImageConverter;
 
-namespace Sp00ksy
+namespace Matrise
 {
     public partial class ImageConverterForm : Form
     {

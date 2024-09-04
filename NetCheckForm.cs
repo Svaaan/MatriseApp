@@ -1,10 +1,10 @@
-﻿using Sp00ksy.Services.NetCheck;
+﻿using Matrise.Services.NetCheck;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sp00ksy
+namespace Matrise
 {
     public partial class NetCheckForm : Form
     {

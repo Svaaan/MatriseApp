@@ -1,10 +1,10 @@
-﻿using Sp00ksy.Services.PingCheck;
+﻿using Matrise.Services.PingCheck;
 using System;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Sp00ksy
+namespace Matrise
 {
     public partial class PingCheckForm : Form
     {
