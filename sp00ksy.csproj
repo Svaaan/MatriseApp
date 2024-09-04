@@ -36,4 +36,10 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services\IpChatConnection\" />
+    <Folder Include="Services\NetCheck\" />
+    <Folder Include="Services\PlasmaChat\" />
+  </ItemGroup>
+
 </Project>
