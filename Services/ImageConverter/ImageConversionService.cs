@@ -3,7 +3,7 @@ using System.IO;
 using System.Windows.Forms;
 using ImageMagick;
 
-namespace Sp00ksy.Services.ImageConverter
+namespace Matrise.Services.ImageConverter
 {
     public class ImageConversionService
     {

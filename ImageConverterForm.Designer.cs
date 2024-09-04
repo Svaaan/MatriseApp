@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Windows.Forms;
 
-namespace Sp00ksy
+namespace Matrise
 {
     partial class ImageConverterForm : Form
     {

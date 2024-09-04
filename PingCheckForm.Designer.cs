@@ -1,4 +1,4 @@
-﻿namespace Sp00ksy
+﻿namespace Matrise
 {
     partial class PingCheckForm : Form
     {

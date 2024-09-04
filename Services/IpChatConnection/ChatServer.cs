@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 //Server Side Logic
-namespace Sp00ksy.Services.Chat
+namespace Matrise.Services.Chat
 {
     public class ChatServer
     {

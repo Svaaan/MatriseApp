@@ -2,7 +2,7 @@
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace Sp00ksy.Services.PingCheck
+namespace Matrise.Services.PingCheck
 {
     public class IpFetchService
     {

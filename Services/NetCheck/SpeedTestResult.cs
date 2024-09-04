@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Sp00ksy.Services.NetCheck
+namespace Matrise.Services.NetCheck
 {
     public class SpeedTestResultAggregator
     {

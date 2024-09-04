@@ -3,7 +3,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Windows.Forms;
 
-namespace Sp00ksy
+namespace Matrise
 {
     public partial class Chat : Form
     {
