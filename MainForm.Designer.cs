@@ -5,7 +5,7 @@
         private System.ComponentModel.IContainer components = null;
 
         private Button buttonImageConverter;
-        private Button buttonNetCheck;
+        private Button buttonWatermark;
         private Button buttonPingCheck;
         private Button btnOpenChat;
         private TableLayoutPanel tableLayoutPanel1;
@@ -24,7 +24,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             buttonImageConverter = new Button();
-            buttonNetCheck = new Button();
+            buttonWatermark = new Button();
             buttonPingCheck = new Button();
             btnOpenChat = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
@@ -49,18 +49,18 @@
             // 
             // buttonNetCheck
             // 
-            buttonNetCheck.BackColor = Color.FromArgb(40, 40, 40);
-            buttonNetCheck.Dock = DockStyle.Fill;
-            buttonNetCheck.FlatStyle = FlatStyle.Flat;
-            buttonNetCheck.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            buttonNetCheck.ForeColor = Color.White;
-            buttonNetCheck.Location = new Point(259, 3);
-            buttonNetCheck.Name = "buttonNetCheck";
-            buttonNetCheck.Size = new Size(250, 34);
-            buttonNetCheck.TabIndex = 1;
-            buttonNetCheck.Text = "Net Check";
-            buttonNetCheck.UseVisualStyleBackColor = false;
-            buttonNetCheck.Click += NetCheck_Click;
+            buttonWatermark.BackColor = Color.FromArgb(40, 40, 40);
+            buttonWatermark.Dock = DockStyle.Fill;
+            buttonWatermark.FlatStyle = FlatStyle.Flat;
+            buttonWatermark.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            buttonWatermark.ForeColor = Color.White;
+            buttonWatermark.Location = new Point(259, 3);
+            buttonWatermark.Name = "buttonNetCheck";
+            buttonWatermark.Size = new Size(250, 34);
+            buttonWatermark.TabIndex = 1;
+            buttonWatermark.Text = "Watermark image";
+            buttonWatermark.UseVisualStyleBackColor = false;
+            buttonWatermark.Click += NetCheck_Click;
             // 
             // buttonPingCheck
             // 
@@ -101,7 +101,7 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 25F));
             tableLayoutPanel1.Controls.Add(buttonImageConverter, 0, 0);
-            tableLayoutPanel1.Controls.Add(buttonNetCheck, 1, 0);
+            tableLayoutPanel1.Controls.Add(buttonWatermark, 1, 0);
             tableLayoutPanel1.Controls.Add(buttonPingCheck, 2, 0);
             tableLayoutPanel1.Controls.Add(btnOpenChat, 3, 0);
             tableLayoutPanel1.Dock = DockStyle.Top;
