@@ -11,7 +11,7 @@ namespace Matrise
         private MagickImage uploadedImage;
         private readonly ImageUploadService imageUploadService;
         private readonly ImageConversionService imageConversionService;
-        private readonly WatermarkService watermarkService;
+        
 
         public ImageConverterForm()
         {
@@ -19,7 +19,7 @@ namespace Matrise
             // Initialize services
             imageUploadService = new ImageUploadService();
             imageConversionService = new ImageConversionService();
-            watermarkService = new WatermarkService(); // Initialize WatermarkService
+             // Initialize WatermarkService
 
             // Set up event handlers
             buttonUpload.Click += ButtonUpload_Click;

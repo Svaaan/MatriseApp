@@ -23,7 +23,7 @@ namespace Matrise
 
         private void NetCheck_Click(object sender, EventArgs e)
         {
-            NetCheckForm frm = new();
+            WatermarkForm frm = new();
             frm.ShowDialog();
         }
 

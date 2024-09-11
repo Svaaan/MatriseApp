@@ -1,6 +1,6 @@
 ﻿namespace Matrise
 {
-    partial class NetCheckForm : Form
+    partial class WatermarkForm : Form
     {
         private System.ComponentModel.IContainer components = null;
         private Button speedTestButton;
@@ -29,21 +29,7 @@
             numberOfTestsUpDown = new NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)numberOfTestsUpDown).BeginInit();
             SuspendLayout();
-            // 
-            // speedTestButton
-            // 
-            speedTestButton.BackColor = Color.FromArgb(50, 150, 250);
-            speedTestButton.FlatStyle = FlatStyle.Flat;
-            speedTestButton.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            speedTestButton.ForeColor = Color.White;
-            speedTestButton.Location = new Point(420, 123);
-            speedTestButton.Name = "speedTestButton";
-            speedTestButton.Size = new Size(244, 53);
-            speedTestButton.TabIndex = 0;
-            speedTestButton.Text = "Start Speed Test";
-            speedTestButton.UseVisualStyleBackColor = false;
-            speedTestButton.Click += SpeedTestButton_Click;
-            // 
+          
             // downloadSpeedLabel
             // 
             downloadSpeedLabel.AutoSize = true;
