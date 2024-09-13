@@ -5,8 +5,6 @@ VisualStudioVersion = 17.8.34511.84
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matrise", "Matrise.csproj", "{02AFEEE3-6FD0-4982-81C1-4BB09E556F37}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Matrise", "..\Matrise\Matrise.vdproj", "{3EAD12AD-C2C8-4A57-8003-DCB5CD81B81D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,12 +27,6 @@ Global
 		{02AFEEE3-6FD0-4982-81C1-4BB09E556F37}.Release|x64.Build.0 = Release|x64
 		{02AFEEE3-6FD0-4982-81C1-4BB09E556F37}.Release|x86.ActiveCfg = Release|Any CPU
 		{02AFEEE3-6FD0-4982-81C1-4BB09E556F37}.Release|x86.Build.0 = Release|Any CPU
-		{3EAD12AD-C2C8-4A57-8003-DCB5CD81B81D}.Debug|Any CPU.ActiveCfg = Release
-		{3EAD12AD-C2C8-4A57-8003-DCB5CD81B81D}.Debug|x64.ActiveCfg = Debug
-		{3EAD12AD-C2C8-4A57-8003-DCB5CD81B81D}.Debug|x86.ActiveCfg = Debug
-		{3EAD12AD-C2C8-4A57-8003-DCB5CD81B81D}.Release|Any CPU.ActiveCfg = Release
-		{3EAD12AD-C2C8-4A57-8003-DCB5CD81B81D}.Release|x64.ActiveCfg = Release
-		{3EAD12AD-C2C8-4A57-8003-DCB5CD81B81D}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

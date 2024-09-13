@@ -1,14 +1,19 @@
-﻿namespace Matrise
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace Matrise
 {
     partial class WatermarkForm : Form
     {
         private System.ComponentModel.IContainer components = null;
-        private Button speedTestButton;
-        private Label downloadSpeedLabel;
-        private Label uploadSpeedLabel;
-        private Label statusLabel;
-        private TextBox resultsTextBox;
-        private NumericUpDown numberOfTestsUpDown;
+        private Button btnUpload;
+        private Button btnApplyWatermark;
+        private Button btnSave;
+        private Button btnCancel;
+        private PictureBox pictureBox;
+        private TextBox txtWatermark;
+        private Label lblTitle;
 
         protected override void Dispose(bool disposing)
         {
@@ -21,92 +26,115 @@
 
         private void InitializeComponent()
         {
-            speedTestButton = new Button();
-            downloadSpeedLabel = new Label();
-            uploadSpeedLabel = new Label();
-            statusLabel = new Label();
-            resultsTextBox = new TextBox();
-            numberOfTestsUpDown = new NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)numberOfTestsUpDown).BeginInit();
+            btnUpload = new Button();
+            btnApplyWatermark = new Button();
+            btnSave = new Button();
+            btnCancel = new Button();
+            pictureBox = new PictureBox();
+            txtWatermark = new TextBox();
+            lblTitle = new Label();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             SuspendLayout();
-          
-            // downloadSpeedLabel
             // 
-            downloadSpeedLabel.AutoSize = true;
-            downloadSpeedLabel.BackColor = Color.FromArgb(20, 20, 20);
-            downloadSpeedLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            downloadSpeedLabel.ForeColor = Color.White;
-            downloadSpeedLabel.Location = new Point(178, 57);
-            downloadSpeedLabel.Name = "downloadSpeedLabel";
-            downloadSpeedLabel.Size = new Size(267, 25);
-            downloadSpeedLabel.TabIndex = 1;
-            downloadSpeedLabel.Text = "Download Speed: 0.00 Mbps";
+            // btnUpload
             // 
-            // uploadSpeedLabel
+            btnUpload.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnUpload.BackColor = Color.FromArgb(33, 150, 243);
+            btnUpload.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnUpload.ForeColor = Color.White;
+            btnUpload.Location = new Point(356, 117);
+            btnUpload.Name = "btnUpload";
+            btnUpload.Size = new Size(200, 50);
+            btnUpload.TabIndex = 3;
+            btnUpload.Text = "Upload Image";
+            btnUpload.UseVisualStyleBackColor = false;
             // 
-            uploadSpeedLabel.AutoSize = true;
-            uploadSpeedLabel.BackColor = Color.FromArgb(20, 20, 20);
-            uploadSpeedLabel.Font = new Font("Segoe UI", 14F, FontStyle.Bold);
-            uploadSpeedLabel.ForeColor = Color.White;
-            uploadSpeedLabel.Location = new Point(583, 57);
-            uploadSpeedLabel.Name = "uploadSpeedLabel";
-            uploadSpeedLabel.Size = new Size(240, 25);
-            uploadSpeedLabel.TabIndex = 2;
-            uploadSpeedLabel.Text = "Upload Speed: 0.00 Mbps";
+            // btnApplyWatermark
             // 
-            // statusLabel
+            btnApplyWatermark.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnApplyWatermark.BackColor = Color.FromArgb(76, 175, 80);
+            btnApplyWatermark.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnApplyWatermark.ForeColor = Color.White;
+            btnApplyWatermark.Location = new Point(670, 117);
+            btnApplyWatermark.Name = "btnApplyWatermark";
+            btnApplyWatermark.Size = new Size(200, 50);
+            btnApplyWatermark.TabIndex = 4;
+            btnApplyWatermark.Text = "Apply Watermark";
+            btnApplyWatermark.UseVisualStyleBackColor = false;
             // 
-            statusLabel.AutoSize = true;
-            statusLabel.BackColor = Color.FromArgb(20, 20, 20);
-            statusLabel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            statusLabel.ForeColor = Color.White;
-            statusLabel.Location = new Point(446, 248);
-            statusLabel.Name = "statusLabel";
-            statusLabel.Size = new Size(183, 21);
-            statusLabel.TabIndex = 3;
-            statusLabel.Text = "Status: Waiting to start";
+            // btnSave
             // 
-            // resultsTextBox
+            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnSave.BackColor = Color.FromArgb(76, 175, 80);
+            btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnSave.ForeColor = Color.White;
+            btnSave.Location = new Point(356, 585);
+            btnSave.Name = "btnSave";
+            btnSave.Size = new Size(200, 50);
+            btnSave.TabIndex = 5;
+            btnSave.Text = "Save Image";
+            btnSave.UseVisualStyleBackColor = false;
             // 
-            resultsTextBox.BackColor = Color.FromArgb(40, 40, 40);
-            resultsTextBox.ForeColor = Color.White;
-            resultsTextBox.Location = new Point(251, 284);
-            resultsTextBox.Multiline = true;
-            resultsTextBox.Name = "resultsTextBox";
-            resultsTextBox.ReadOnly = true;
-            resultsTextBox.Size = new Size(590, 182);
-            resultsTextBox.TabIndex = 4;
+            // btnCancel
             // 
-            // numberOfTestsUpDown
+            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            btnCancel.BackColor = Color.FromArgb(188, 188, 188);
+            btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            btnCancel.ForeColor = Color.White;
+            btnCancel.Location = new Point(670, 585);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(200, 50);
+            btnCancel.TabIndex = 6;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = false;
             // 
-            numberOfTestsUpDown.BackColor = Color.FromArgb(40, 40, 40);
-            numberOfTestsUpDown.BorderStyle = BorderStyle.None;
-            numberOfTestsUpDown.ForeColor = Color.White;
-            numberOfTestsUpDown.Location = new Point(472, 200);
-            numberOfTestsUpDown.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
-            numberOfTestsUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numberOfTestsUpDown.Name = "numberOfTestsUpDown";
-            numberOfTestsUpDown.Size = new Size(120, 19);
-            numberOfTestsUpDown.TabIndex = 5;
-            numberOfTestsUpDown.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // pictureBox
             // 
-            // NetCheckForm
+            pictureBox.BackColor = Color.FromArgb(48, 48, 48);
+            pictureBox.Location = new Point(286, 184);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new Size(669, 380);
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox.TabIndex = 2;
+            pictureBox.TabStop = false;
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
-            AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(20, 20, 20);
-            ClientSize = new Size(1025, 487);
-            Controls.Add(numberOfTestsUpDown);
-            Controls.Add(resultsTextBox);
-            Controls.Add(statusLabel);
-            Controls.Add(speedTestButton);
-            Controls.Add(downloadSpeedLabel);
-            Controls.Add(uploadSpeedLabel);
+            // txtWatermark
+            // 
+            txtWatermark.Font = new Font("Segoe UI", 12F);
+            txtWatermark.ForeColor = Color.DarkSlateGray;
+            txtWatermark.Location = new Point(477, 65);
+            txtWatermark.Name = "txtWatermark";
+            txtWatermark.PlaceholderText = "Enter watermark text here";
+            txtWatermark.Size = new Size(300, 29);
+            txtWatermark.TabIndex = 1;
+            // 
+            // lblTitle
+            // 
+            lblTitle.AutoSize = true;
+            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.DarkSlateGray;
+            lblTitle.Location = new Point(533, 9);
+            lblTitle.Name = "lblTitle";
+            lblTitle.Size = new Size(194, 32);
+            lblTitle.TabIndex = 0;
+            lblTitle.Text = "Add Watermark";
+            // 
+            // WatermarkForm
+            // 
+            BackColor = Color.FromArgb(24, 24, 24);
+            ClientSize = new Size(1200, 700);
+            Controls.Add(lblTitle);
+            Controls.Add(txtWatermark);
+            Controls.Add(pictureBox);
+            Controls.Add(btnUpload);
+            Controls.Add(btnApplyWatermark);
+            Controls.Add(btnSave);
+            Controls.Add(btnCancel);
             FormBorderStyle = FormBorderStyle.FixedSingle;
             MaximizeBox = false;
-            Name = "NetCheckForm";
-            Text = "Network Speed Test";
-            ((System.ComponentModel.ISupportInitialize)numberOfTestsUpDown).EndInit();
+            Name = "WatermarkForm";
+            Text = "Watermark Image";
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
