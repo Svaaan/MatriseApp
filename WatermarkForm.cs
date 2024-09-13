@@ -16,11 +16,12 @@ namespace Matrise
             InitializeComponent();
             watermarkService = new WatermarkService();
 
-            // Attach event handlers here
+            // Attach event handlers
             btnUpload.Click += BtnUpload_Click;
             btnApplyWatermark.Click += BtnApplyWatermark_Click;
             btnSave.Click += BtnSave_Click;
             btnCancel.Click += BtnCancel_Click;
+            btnAddInvisibleWatermark.Click += BtnAddInvisibleWatermark_Click;
         }
 
         private void BtnUpload_Click(object sender, EventArgs e)
@@ -64,7 +65,7 @@ namespace Matrise
             {
                 Cursor = Cursors.WaitCursor;
 
-                Image watermarkedImage = await watermarkService.ApplyWatermarkAsync(selectedImage, watermarkText, 24, 0.5); // Adjust font size and opacity as needed
+                Image watermarkedImage = await watermarkService.ApplyWatermarkAsync(selectedImage, watermarkText, 16, 0.5); // Adjust font size and opacity as needed
 
                 pictureBox.Image = watermarkedImage;
             }
@@ -110,6 +111,37 @@ namespace Matrise
         private void BtnCancel_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private async void BtnAddInvisibleWatermark_Click(object sender, EventArgs e)
+        {
+            if (selectedImage == null)
+            {
+                MessageBox.Show("Please upload an image first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            string author = "Author Name";   
+            string copyright = "Copyright Info";  
+            string description = "Image Description"; 
+
+            try
+            {
+                Cursor = Cursors.WaitCursor;
+
+                // Apply invisible watermark
+                await watermarkService.AddInvisibleWatermarkAsync(selectedImage, author, copyright, description);
+
+                MessageBox.Show("Invisible watermark added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                Cursor = Cursors.Default;
+            }
         }
     }
 }
