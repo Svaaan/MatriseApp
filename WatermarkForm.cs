@@ -156,7 +156,8 @@ namespace Matrise
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-            this.Close();
+           
+            pictureBox.Image = null;
         }
 
         private async void BtnAddInvisibleWatermark_Click(object sender, EventArgs e)
