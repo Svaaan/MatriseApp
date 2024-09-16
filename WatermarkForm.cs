@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -35,8 +37,10 @@ namespace Matrise
                 {
                     try
                     {
-                        selectedImage = Image.FromFile(openFileDialog.FileName);
-                        pictureBox.Image = selectedImage;
+                        Image newImage = Image.FromFile(openFileDialog.FileName);
+                        pictureBox.Image?.Dispose(); // Dispose previous image if any
+                        selectedImage = newImage;
+                        pictureBox.Image = newImage;
                     }
                     catch (Exception ex)
                     {
@@ -45,6 +49,7 @@ namespace Matrise
                 }
             }
         }
+
 
         private async void BtnApplyWatermark_Click(object sender, EventArgs e)
         {
@@ -92,21 +97,62 @@ namespace Matrise
                 saveFileDialog.Filter = "JPEG Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp";
                 saveFileDialog.Title = "Save Watermarked Image";
                 saveFileDialog.DefaultExt = "jpg";
+                saveFileDialog.AddExtension = true;
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
                     try
                     {
-                        pictureBox.Image.Save(saveFileDialog.FileName);
+                        string filePath = saveFileDialog.FileName;
+
+                        // Determine the image format based on file extension
+                        System.Drawing.Imaging.ImageFormat format;
+                        switch (Path.GetExtension(filePath).ToLower())
+                        {
+                            case ".png":
+                                format = System.Drawing.Imaging.ImageFormat.Png;
+                                break;
+                            case ".bmp":
+                                format = System.Drawing.Imaging.ImageFormat.Bmp;
+                                break;
+                            case ".jpg":
+                            case ".jpeg":
+                                format = System.Drawing.Imaging.ImageFormat.Jpeg;
+                                break;
+                            default:
+                                throw new ArgumentException("Unsupported file format.");
+                        }
+
+                        // Save the image directly in the desired format
+                        // Added FileMode.Create to overwrite the file if it already exists
+                        using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            pictureBox.Image.Save(fileStream, format);
+                        }
+
                         MessageBox.Show("Image saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (ArgumentException argEx)
+                    {
+                        MessageBox.Show($"File path or format error: {argEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (ExternalException extEx)
+                    {
+                        MessageBox.Show($"Image or file system error: {extEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    catch (IOException ioEx)
+                    {
+                        MessageBox.Show($"I/O error: {ioEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"An error occurred while saving the image: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"Unexpected error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
+
+
 
         private void BtnCancel_Click(object sender, EventArgs e)
         {
