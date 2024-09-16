@@ -7,54 +7,52 @@ public class WatermarkService
 {
     public void AddWatermark(MagickImage image, string watermarkText, int fontSize, double opacity)
     {
-        // Dynamic font size scaling based on image width
-        int dynamicFontSize = (int)(image.Width * 0.05); // 5% of the image width
-        fontSize = dynamicFontSize > fontSize ? dynamicFontSize : fontSize;
+        // Define padding to keep watermark inside the image boundaries
+        int padding = (int)(image.Width * 0.02); // 2% of image width
 
-        // Set padding to ensure the watermark stays inside the image boundaries
-        int padding = (int)(image.Width * 0.02); // 2% of the image width
-
+        // Create a temporary image for watermark
         using (var textWatermark = new MagickImage(MagickColors.Transparent, image.Width, image.Height))
         {
+            // Configure text drawing
             var drawables = new Drawables()
                 .FontPointSize(fontSize)
                 .FillColor(new MagickColor(255, 255, 255, (byte)(Quantum.Max * opacity))) // White with opacity
                 .StrokeColor(MagickColors.Transparent)
                 .TextAlignment(TextAlignment.Center);
 
-            // Calculate number of rows and columns for watermarks
-            int numRows = 2;  // 2 rows
-            int numCols = 5;  // 5 columns
+            // Define number of rows and columns for watermarks
+            int numRows = 4;  // Number of rows of watermarks
+            int numCols = 5;  // Number of columns of watermarks
 
-            // Calculate spacing between watermarks based on image size and number of rows/columns
+            // Calculate spacing between watermarks
             int tileSpacingX = (image.Width - 2 * padding) / numCols;  // Horizontal space between watermarks
             int tileSpacingY = (image.Height - 2 * padding) / numRows; // Vertical space between watermarks
 
-            // Adjust spacing to ensure watermarks fit within the image boundaries
-            tileSpacingX = Math.Max(tileSpacingX, fontSize);
-            tileSpacingY = Math.Max(tileSpacingY, fontSize);
+            // Make sure spacing is positive
+            tileSpacingX = Math.Max(tileSpacingX, 1);
+            tileSpacingY = Math.Max(tileSpacingY, 1);
 
-            // Loop to place watermarks
+            // Place watermarks in calculated positions
             for (int row = 0; row < numRows; row++)
             {
                 for (int col = 0; col < numCols; col++)
                 {
-                    // Calculate the x and y positions for each watermark
-                    int xPos = padding + (col * tileSpacingX);
-                    int yPos = padding + (row * tileSpacingY);
+                    // Calculate x and y positions for each watermark
+                    int xPos = padding + (col * tileSpacingX) + (tileSpacingX / 2);
+                    int yPos = padding + (row * tileSpacingY) + (tileSpacingY / 2);
 
-                    // Ensure watermark is within the image boundaries
-                    if (xPos + fontSize < image.Width - padding && yPos + fontSize < image.Height - padding)
+                    // Ensure watermark is within image boundaries
+                    if (xPos < image.Width - padding && yPos < image.Height - padding)
                     {
                         drawables.Text(xPos, yPos, watermarkText);
                     }
                 }
             }
 
-            // Draw all watermarks onto the transparent image
+            // Draw all watermarks onto the temporary image
             drawables.Draw(textWatermark);
 
-            // Composite the watermarked transparent image over the original image
+            // Composite the watermark image over the original image
             image.Composite(textWatermark, Gravity.Northwest, CompositeOperator.Over);
         }
     }
