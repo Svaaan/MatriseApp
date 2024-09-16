@@ -100,7 +100,7 @@
             btnOpenChat.Name = "btnOpenChat";
             btnOpenChat.Size = new Size(240, 50);
             btnOpenChat.TabIndex = 3;
-            btnOpenChat.Text = "Chat";
+            btnOpenChat.Text = "IpChat";
             btnOpenChat.UseVisualStyleBackColor = false;
             btnOpenChat.Click += OpenChat_Click;
             // 
