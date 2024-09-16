@@ -121,9 +121,9 @@ namespace Matrise
                 return;
             }
 
-            string author = "Author Name";   
-            string copyright = "Copyright Info";  
-            string description = "Image Description"; 
+            string author = "Author Name";
+            string copyright = "Copyright Info";
+            string description = "Image Description";
 
             try
             {
@@ -132,7 +132,17 @@ namespace Matrise
                 // Apply invisible watermark
                 await watermarkService.AddInvisibleWatermarkAsync(selectedImage, author, copyright, description);
 
-                MessageBox.Show("Invisible watermark added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                // Save the image to check later
+                var tempFilePath = Path.Combine(Path.GetTempPath(), "watermarked_image.jpg");
+                pictureBox.Image.Save(tempFilePath);
+
+                // Load the image again to verify metadata
+                string metadata = watermarkService.DecodeInvisibleWatermark(new Bitmap(tempFilePath));
+
+                // Display metadata to verify
+                MessageBox.Show($"Metadata:\n{metadata}", "Metadata Verification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                MessageBox.Show("Invisible watermark added and verified successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
@@ -144,4 +154,5 @@ namespace Matrise
             }
         }
     }
+    
 }

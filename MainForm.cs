@@ -21,7 +21,7 @@ namespace Matrise
             imageFrm.ShowDialog();
         }
 
-        private void NetCheck_Click(object sender, EventArgs e)
+        private void Watermark_Click(object sender, EventArgs e)
         {
             WatermarkForm frm = new();
             frm.ShowDialog();
@@ -33,7 +33,7 @@ namespace Matrise
             pingFrm.ShowDialog();
         }
 
-        private void btnOpenChat_Click(object sender, EventArgs e)
+        private void OpenChat_Click(object sender, EventArgs e)
         {
             // Open the PlasmaChat form
             IpChatConnection chatForm = new IpChatConnection();

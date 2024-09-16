@@ -7,39 +7,55 @@ public class WatermarkService
 {
     public void AddWatermark(MagickImage image, string watermarkText, int fontSize, double opacity)
     {
+        // Dynamic font size scaling based on image width
+        int dynamicFontSize = (int)(image.Width * 0.05); // 5% of the image width
+        fontSize = dynamicFontSize > fontSize ? dynamicFontSize : fontSize;
+
+        // Set padding to ensure the watermark stays inside the image boundaries
+        int padding = (int)(image.Width * 0.02); // 2% of the image width
+
         using (var textWatermark = new MagickImage(MagickColors.Transparent, image.Width, image.Height))
         {
-            // Set the font size
-            fontSize = 24;
-
-            // Create drawables with increased font size
             var drawables = new Drawables()
-                .FontPointSize(fontSize) // Increase the font size here
-                .FillColor(MagickColors.White)
+                .FontPointSize(fontSize)
+                .FillColor(new MagickColor(255, 255, 255, (byte)(Quantum.Max * opacity))) // White with opacity
+                .StrokeColor(MagickColors.Transparent)
                 .TextAlignment(TextAlignment.Center);
 
-            // Add text at specific positions
-            drawables
-                .Gravity(Gravity.Northwest)
-                .Text(10, 10, watermarkText)  // Top-left corner
+            // Calculate number of rows and columns for watermarks
+            int numRows = 2;  // 2 rows
+            int numCols = 5;  // 5 columns
 
-                .Gravity(Gravity.Northeast)
-                .Text(image.Width - 10, 10, watermarkText)  // Top-right corner
+            // Calculate spacing between watermarks based on image size and number of rows/columns
+            int tileSpacingX = (image.Width - 2 * padding) / numCols;  // Horizontal space between watermarks
+            int tileSpacingY = (image.Height - 2 * padding) / numRows; // Vertical space between watermarks
 
-                .Gravity(Gravity.Southwest)
-                .Text(10, image.Height - 10, watermarkText)  // Bottom-left corner
+            // Adjust spacing to ensure watermarks fit within the image boundaries
+            tileSpacingX = Math.Max(tileSpacingX, fontSize);
+            tileSpacingY = Math.Max(tileSpacingY, fontSize);
 
-                .Gravity(Gravity.Southeast)
-                .Text(image.Width - 10, image.Height - 10, watermarkText)  // Bottom-right corner
+            // Loop to place watermarks
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numCols; col++)
+                {
+                    // Calculate the x and y positions for each watermark
+                    int xPos = padding + (col * tileSpacingX);
+                    int yPos = padding + (row * tileSpacingY);
 
-                .Gravity(Gravity.Center)
-                .Text(image.Width / 2, image.Height / 2, watermarkText);  // Center
+                    // Ensure watermark is within the image boundaries
+                    if (xPos + fontSize < image.Width - padding && yPos + fontSize < image.Height - padding)
+                    {
+                        drawables.Text(xPos, yPos, watermarkText);
+                    }
+                }
+            }
 
+            // Draw all watermarks onto the transparent image
             drawables.Draw(textWatermark);
 
-            // Apply opacity to the text watermark
-            textWatermark.Evaluate(Channels.Alpha, EvaluateOperator.Multiply, opacity);
-            image.Composite(textWatermark, Gravity.Center, CompositeOperator.Over);
+            // Composite the watermarked transparent image over the original image
+            image.Composite(textWatermark, Gravity.Northwest, CompositeOperator.Over);
         }
     }
 
@@ -87,16 +103,25 @@ public class WatermarkService
         }
     }
 
-    // Method to extract invisible watermark (metadata)
     public string DecodeInvisibleWatermark(Image selectedImage)
     {
-        using (var magickImage = new MagickImage(ImageToByteArray(selectedImage)))
+        try
         {
-            string author = magickImage.GetAttribute("Author");
-            string copyright = magickImage.GetAttribute("Copyright");
-            string description = magickImage.GetAttribute("Description");
+            using (var magickImage = new MagickImage(ImageToByteArray(selectedImage)))
+            {
+                // Retrieve metadata attributes
+                string author = magickImage.GetAttribute("Author") ?? "N/A";
+                string copyright = magickImage.GetAttribute("Copyright") ?? "N/A";
+                string description = magickImage.GetAttribute("Description") ?? "N/A";
 
-            return $"Author: {author}, Copyright: {copyright}, Description: {description}";
+                // Format the result
+                return $"Author: {author}, Copyright: {copyright}, Description: {description}";
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions
+            return $"An error occurred while retrieving metadata: {ex.Message}";
         }
     }
 }
