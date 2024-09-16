@@ -7,6 +7,13 @@ public class WatermarkService
 {
     public void AddWatermark(MagickImage image, string watermarkText, int fontSize, double opacity)
     {
+        const int maxTextLength = 13;
+
+        // Validate watermark text length
+        if (watermarkText.Length > maxTextLength)
+        {
+            throw new ArgumentException($"Watermark text has a {maxTextLength} characters limit.");
+        }
         // Define padding to keep watermark inside the image boundaries
         int padding = (int)(image.Width * 0.02); // 2% of image width
 
@@ -20,15 +27,15 @@ public class WatermarkService
                 .StrokeColor(MagickColors.Transparent)
                 .TextAlignment(TextAlignment.Center);
 
-            // Define number of rows and columns for watermarks
-            int numRows = 4;  // Number of rows of watermarks
-            int numCols = 5;  // Number of columns of watermarks
+         
+            int numRows = 4;  //if characther input is longer than 13 sign. try reduce cols, and see how long the text goes.
+            int numCols = 5;  //Put a new limit on that max and keep changeing the max limit of caracther. To be max of maybe 25
 
-            // Calculate spacing between watermarks
+
             int tileSpacingX = (image.Width - 2 * padding) / numCols;  // Horizontal space between watermarks
             int tileSpacingY = (image.Height - 2 * padding) / numRows; // Vertical space between watermarks
 
-            // Make sure spacing is positive
+            //positive spacing
             tileSpacingX = Math.Max(tileSpacingX, 1);
             tileSpacingY = Math.Max(tileSpacingY, 1);
 
