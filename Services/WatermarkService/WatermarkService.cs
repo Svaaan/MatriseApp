@@ -7,41 +7,51 @@ public class WatermarkService
 {
     public void AddWatermark(MagickImage image, string watermarkText, int fontSize, double opacity)
     {
+        const int maxTextLength = 13;
+
+        if (watermarkText.Length > maxTextLength)
+        {
+            throw new ArgumentException($"Watermark text has a {maxTextLength} characters limit.");
+        }
+
+        int padding = (int)(image.Width * 0.02);
+
         using (var textWatermark = new MagickImage(MagickColors.Transparent, image.Width, image.Height))
         {
-            // Set the font size
-            fontSize = 24;
-
-            // Create drawables with increased font size
             var drawables = new Drawables()
-                .FontPointSize(fontSize) // Increase the font size here
-                .FillColor(MagickColors.White)
+                .FontPointSize(fontSize)
+                .FillColor(new MagickColor(255, 255, 255, (byte)(Quantum.Max * opacity)))
+                .StrokeColor(MagickColors.Transparent)
                 .TextAlignment(TextAlignment.Center);
 
-            // Add text at specific positions
-            drawables
-                .Gravity(Gravity.Northwest)
-                .Text(10, 10, watermarkText)  // Top-left corner
+            int numRows = 4;
+            int numCols = 5;
 
-                .Gravity(Gravity.Northeast)
-                .Text(image.Width - 10, 10, watermarkText)  // Top-right corner
+            int tileSpacingX = (image.Width - 2 * padding) / numCols;
+            int tileSpacingY = (image.Height - 2 * padding) / numRows;
 
-                .Gravity(Gravity.Southwest)
-                .Text(10, image.Height - 10, watermarkText)  // Bottom-left corner
+            tileSpacingX = Math.Max(tileSpacingX, 1);
+            tileSpacingY = Math.Max(tileSpacingY, 1);
 
-                .Gravity(Gravity.Southeast)
-                .Text(image.Width - 10, image.Height - 10, watermarkText)  // Bottom-right corner
+            for (int row = 0; row < numRows; row++)
+            {
+                for (int col = 0; col < numCols; col++)
+                {
+                    int xPos = padding + (col * tileSpacingX) + (tileSpacingX / 2);
+                    int yPos = padding + (row * tileSpacingY) + (tileSpacingY / 2);
 
-                .Gravity(Gravity.Center)
-                .Text(image.Width / 2, image.Height / 2, watermarkText);  // Center
+                    if (xPos < image.Width - padding && yPos < image.Height - padding)
+                    {
+                        drawables.Text(xPos, yPos, watermarkText);
+                    }
+                }
+            }
 
             drawables.Draw(textWatermark);
-
-            // Apply opacity to the text watermark
-            textWatermark.Evaluate(Channels.Alpha, EvaluateOperator.Multiply, opacity);
-            image.Composite(textWatermark, Gravity.Center, CompositeOperator.Over);
+            image.Composite(textWatermark, Gravity.Northwest, CompositeOperator.Over);
         }
     }
+
 
     public async Task<Image> ApplyWatermarkAsync(Image selectedImage, string watermarkText, int fontSize, double opacity)
     {
@@ -51,6 +61,7 @@ public class WatermarkService
             return ByteArrayToImage(magickImage.ToByteArray());
         }
     }
+
 
     private byte[] ImageToByteArray(System.Drawing.Image image)
     {
@@ -87,16 +98,25 @@ public class WatermarkService
         }
     }
 
-    // Method to extract invisible watermark (metadata)
     public string DecodeInvisibleWatermark(Image selectedImage)
     {
-        using (var magickImage = new MagickImage(ImageToByteArray(selectedImage)))
+        try
         {
-            string author = magickImage.GetAttribute("Author");
-            string copyright = magickImage.GetAttribute("Copyright");
-            string description = magickImage.GetAttribute("Description");
+            using (var magickImage = new MagickImage(ImageToByteArray(selectedImage)))
+            {
+                // Retrieve metadata attributes
+                string author = magickImage.GetAttribute("Author") ?? "N/A";
+                string copyright = magickImage.GetAttribute("Copyright") ?? "N/A";
+                string description = magickImage.GetAttribute("Description") ?? "N/A";
 
-            return $"Author: {author}, Copyright: {copyright}, Description: {description}";
+                // Format the result
+                return $"Author: {author}, Copyright: {copyright}, Description: {description}";
+            }
+        }
+        catch (Exception ex)
+        {
+            // Handle exceptions
+            return $"An error occurred while retrieving metadata: {ex.Message}";
         }
     }
 }
