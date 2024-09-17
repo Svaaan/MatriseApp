@@ -1,4 +1,7 @@
-﻿namespace Matrise
+﻿using System;
+using System.Windows.Forms;
+
+namespace Matrise
 {
     partial class Chat
     {
@@ -41,6 +44,9 @@
             this.txtChatLog.Size = new System.Drawing.Size(776, 365);
             this.txtChatLog.TabIndex = 0;
             this.txtChatLog.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtChatLog.Padding = new Padding(5);
+            this.txtChatLog.BorderStyle = BorderStyle.FixedSingle;
+            this.txtChatLog.BorderStyle = BorderStyle.None;
 
             // 
             // txtMessage
@@ -53,6 +59,8 @@
             this.txtMessage.Size = new System.Drawing.Size(695, 23);
             this.txtMessage.TabIndex = 1;
             this.txtMessage.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtMessage.Padding = new Padding(5);
+            this.txtMessage.BorderStyle = BorderStyle.None;
 
             // 
             // btnSendMessage
@@ -66,6 +74,8 @@
             this.btnSendMessage.TabIndex = 2;
             this.btnSendMessage.Text = "Send";
             this.btnSendMessage.UseVisualStyleBackColor = false;
+            this.btnSendMessage.FlatAppearance.BorderSize = 0;
+            this.btnSendMessage.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(60, 160, 255);
             this.btnSendMessage.Click += new System.EventHandler(this.btnSendMessage_Click);
 
             // 
@@ -80,6 +90,8 @@
             this.btnSaveLogs.TabIndex = 3;
             this.btnSaveLogs.Text = "Save Logs";
             this.btnSaveLogs.UseVisualStyleBackColor = false;
+            this.btnSaveLogs.FlatAppearance.BorderSize = 0;
+            this.btnSaveLogs.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 210, 110);
             this.btnSaveLogs.Click += new System.EventHandler(this.btnSaveLogs_Click);
 
             // 
@@ -94,6 +106,8 @@
             this.btnClearLogs.TabIndex = 4;
             this.btnClearLogs.Text = "Clear Logs";
             this.btnClearLogs.UseVisualStyleBackColor = false;
+            this.btnClearLogs.FlatAppearance.BorderSize = 0;
+            this.btnClearLogs.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(255, 120, 120);
             this.btnClearLogs.Click += new System.EventHandler(this.btnClearLogs_Click);
 
             // 

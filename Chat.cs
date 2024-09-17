@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Matrise
@@ -8,6 +9,7 @@ namespace Matrise
     public partial class Chat : Form
     {
         private NetworkStream stream;
+        private StreamWriter writer;
         private string nickname;
         private string ipAddress;
         private int port;
@@ -21,6 +23,9 @@ namespace Matrise
             this.port = port;
             FormClosing += Chat_FormClosing; // Register the FormClosing event handler
 
+            // Initialize StreamWriter once to avoid multiple instantiations
+            writer = new StreamWriter(stream) { AutoFlush = true };
+
             // Log connection success
             LogMessage($"Connection successful: IP = {ipAddress}, Port = {port}", "INFO");
         }
@@ -29,14 +34,16 @@ namespace Matrise
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => LogMessage(message, level)));
+                // Use BeginInvoke for non-blocking UI thread updates
+                BeginInvoke(new Action(() => LogMessage(message, level)));
                 return;
             }
+
             string timestamp = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
             txtChatLog.AppendText($"[{timestamp}] [{level}] {message}{Environment.NewLine}");
         }
 
-        private void btnSendMessage_Click(object sender, EventArgs e)
+        private async void btnSendMessage_Click(object sender, EventArgs e)
         {
             string message = txtMessage.Text.Trim();
             if (string.IsNullOrWhiteSpace(message))
@@ -47,11 +54,8 @@ namespace Matrise
 
             try
             {
-                // Send the message to the server or client
-                using (var writer = new StreamWriter(stream, leaveOpen: true) { AutoFlush = true })
-                {
-                    writer.WriteLine($"{nickname}: {message}"); // Include nickname in the message
-                }
+                // Send the message asynchronously to avoid blocking the UI
+                await writer.WriteLineAsync($"{nickname}: {message}");
 
                 LogMessage($"You: {message}"); // Log the sent message
                 txtMessage.Clear();
@@ -75,8 +79,7 @@ namespace Matrise
                 string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), fileName);
 
                 File.WriteAllText(filePath, txtChatLog.Text);
-
-                LogMessage($"Chat log saved", "INFO");
+                LogMessage($"Chat log saved at {filePath}", "INFO");
             }
             catch (Exception ex)
             {
@@ -98,8 +101,9 @@ namespace Matrise
         {
             try
             {
-                // Close the NetworkStream when the form is closing
-                stream?.Close();
+                // Proper cleanup of NetworkStream and StreamWriter
+                writer?.Dispose();
+                stream?.Dispose();
             }
             catch (Exception ex)
             {

@@ -2,48 +2,80 @@
 using System.IO;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-//Client side logic
+
 namespace Matrise.Services.Chat
 {
     public class ChatClient
     {
         private TcpClient client;
         private NetworkStream stream;
+        private StreamReader reader;
 
         public NetworkStream NetworkStream => stream;  // Expose the NetworkStream
 
         public event Action<string> MessageReceived;
+        public event Action Disconnected;  // Event for handling disconnections
 
         public async Task ConnectToServerAsync(string ipAddress, int port)
         {
-            client = new TcpClient();
-            await client.ConnectAsync(ipAddress, port);
-            stream = client.GetStream();
+            try
+            {
+                client = new TcpClient();
+                await client.ConnectAsync(ipAddress, port);
+                stream = client.GetStream();
+                reader = new StreamReader(stream);
 
-            // Start listening for messages from the server
-            _ = Task.Run(ReceiveMessagesAsync);
+                // Start listening for messages from the server
+                _ = Task.Run(ReceiveMessagesAsync);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error connecting to server: {ex.Message}");
+            }
         }
 
         private async Task ReceiveMessagesAsync()
         {
-            using (var reader = new StreamReader(stream))
+            try
             {
-                while (true)
+                while (client.Connected)
                 {
-                    try
+                    var message = await reader.ReadLineAsync();
+                    if (message != null)
                     {
-                        var message = await reader.ReadLineAsync();
-                        if (message != null)
-                        {
-                            MessageReceived?.Invoke(message);
-                        }
+                        MessageReceived?.Invoke(message);  // Raise event for received message
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        Console.WriteLine($"Error receiving message: {ex.Message}");
+                        // If null, the connection is likely closed
+                        Console.WriteLine("Server closed the connection.");
+                        Disconnect();
                         break;
                     }
                 }
+            }
+            catch (IOException ex)
+            {
+                Console.WriteLine($"Error receiving message: {ex.Message}");
+                Disconnect();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Unexpected error: {ex.Message}");
+                Disconnect();
+            }
+        }
+
+        public void Disconnect()
+        {
+            if (client != null && client.Connected)
+            {
+                client.Close();
+                reader?.Dispose();
+                stream?.Dispose();
+
+                Disconnected?.Invoke();  // Trigger disconnected event
+                Console.WriteLine("Disconnected from server.");
             }
         }
     }

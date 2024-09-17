@@ -17,30 +17,31 @@ namespace Matrise
         private TcpClient serverClient;
         private NetworkStream serverClientStream;
         private bool isServerRunning = false;
-        private object txtPortLog;
 
         public IpChatConnection()
         {
             InitializeComponent();
         }
 
+        // This method handles both starting a server or connecting to an existing one
         private async void btnStartConnect_Click(object sender, EventArgs e)
         {
             if (isServerRunning)
             {
-                await ConnectToServerAsync();
+                await ConnectToServerAsync(); // Connecting to a server
             }
             else
             {
-                await StartServerAsync();
+                await StartServerAsync(); // Starting the server
             }
         }
 
+        // Method to start the server
         private async Task StartServerAsync()
         {
             if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
             {
-                Console.WriteLine("Invalid port number.");
+                MessageBox.Show("Invalid port number.");
                 return;
             }
 
@@ -57,66 +58,66 @@ namespace Matrise
                 isServerRunning = true;
                 btnStartConnect.Text = "Connect";
 
-                // Start a task to listen for connections
-                await Task.Run(async () =>
-                {
-                    serverClient = await server.AcceptTcpClientAsync();
-                    serverClientStream = serverClient.GetStream();
+                // Wait for a client to connect in a background task
+                serverClient = await server.AcceptTcpClientAsync();
+                serverClientStream = serverClient.GetStream();
 
-                    // Open the Chat form and pass the server's client stream
-                    Invoke(new Action(() => {
-                        var chatForm = new Chat(serverClientStream, "ServerNickname", "0.0.0.0", port); // Server IP can be "0.0.0.0"
-                        chatForm.Show();
-                        this.Hide(); // Optionally hide the current form
-                    }));
-                });
+                // Open the Chat form and pass the server's client stream
+                Invoke(new Action(() =>
+                {
+                    var chatForm = new Chat(serverClientStream, "ServerNickname", "0.0.0.0", port); // Server IP can be "0.0.0.0"
+                    chatForm.Show();
+                    this.Hide(); // Optionally hide the current form
+                }));
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error starting server: {ex.Message}");
+                MessageBox.Show($"Error starting server: {ex.Message}");
             }
         }
 
+        // Method to connect as a client
         private async Task ConnectToServerAsync()
         {
             string ipAddress = txtIPAddress.Text;
             if (!IPAddress.TryParse(ipAddress, out _))
             {
-                Console.WriteLine("Invalid IP address.");
+                MessageBox.Show("Invalid IP address.");
                 return;
             }
 
             if (!int.TryParse(txtPort.Text, out int port) || port <= 0 || port >= 65536)
             {
-                Console.WriteLine("Invalid port number.");
+                MessageBox.Show("Invalid port number.");
                 return;
             }
 
             try
             {
                 client = new TcpClient();
-                await client.ConnectAsync(ipAddress, port);
+                await client.ConnectAsync(ipAddress, port); // Connect to the server
                 clientStream = client.GetStream();
                 clientWriter = new StreamWriter(clientStream) { AutoFlush = true };
                 clientReader = new StreamReader(clientStream);
 
-                // Update UI to show connected status
-                var chatForm = new Chat(clientStream, "ClientNickname", ipAddress, port); // Pass IP and port
+                // Show the Chat form and hide the connection form
+                var chatForm = new Chat(clientStream, "ClientNickname", ipAddress, port);
                 chatForm.Show();
-                this.Hide(); // Optionally hide the current form
+                this.Hide();
 
                 // Log connection successful
                 Console.WriteLine($"Connection successful: IP = {ipAddress}, Port = {port}");
 
-                // Start receiving messages from the server
-                await Task.Run(ClientReceiveLoop);
+                // Start receiving messages from the server in a background task
+                _ = Task.Run(ClientReceiveLoop);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error connecting to server: {ex.Message}");
+                MessageBox.Show($"Error connecting to server: {ex.Message}");
             }
         }
 
+        // Background task for continuously receiving messages
         private async Task ClientReceiveLoop()
         {
             try
@@ -124,7 +125,8 @@ namespace Matrise
                 string message;
                 while ((message = await clientReader.ReadLineAsync()) != null)
                 {
-                    // Display the received message (implementation depends on Chat form)
+                    // Handle received messages here (e.g., show in chat form)
+                    Console.WriteLine($"Received: {message}");
                 }
             }
             catch (IOException ex)
@@ -141,6 +143,7 @@ namespace Matrise
             }
         }
 
+        // Example method for showing open ports (netstat command)
         private void btnShowPorts_Click(object sender, EventArgs e)
         {
             try
@@ -159,13 +162,12 @@ namespace Matrise
                     process.WaitForExit();
 
                     // Display the open ports in a multiline TextBox or other control
-                    // Replace txtPortLog with your actual control name if needed
-                   
+                    //txtPortLog.Text = output; // Assuming you have a multiline TextBox called txtPortLog
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error executing netstat: {ex.Message}");
+                MessageBox.Show($"Error executing netstat: {ex.Message}");
             }
         }
     }
