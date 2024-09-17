@@ -20,192 +20,114 @@ namespace Matrise
         private Label lblAuthor;
         private Label lblCopyright;
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+     
 
         private void InitializeComponent()
         {
-            btnUpload = new Button();
-            btnApplyWatermark = new Button();
-            btnSave = new Button();
-            btnCancel = new Button();
-            btnAddInvisibleWatermark = new Button();
-            pictureBox = new PictureBox();
-            txtWatermark = new TextBox();
-            txtAuthor = new TextBox();
-            txtCopyright = new TextBox();
+            // Base form design with dark theme
+            BackColor = Color.FromArgb(30, 30, 30);  // Darker background
+            ForeColor = Color.White;  // White font for labels
+
+            // Title Label
             lblTitle = new Label();
-            lblAuthor = new Label();
-            lblCopyright = new Label();
-            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
-            SuspendLayout();
-            // 
-            // btnUpload
-            // 
-            btnUpload.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnUpload.BackColor = Color.FromArgb(33, 150, 243);
-            btnUpload.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnUpload.ForeColor = Color.White;
-            btnUpload.Location = new Point(661, 84);
-            btnUpload.Name = "btnUpload";
-            btnUpload.Size = new Size(200, 50);
-            btnUpload.TabIndex = 3;
-            btnUpload.Text = "Upload Image";
-            btnUpload.UseVisualStyleBackColor = false;
-            // 
-            // btnApplyWatermark
-            // 
-            btnApplyWatermark.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnApplyWatermark.BackColor = Color.FromArgb(76, 175, 80);
-            btnApplyWatermark.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnApplyWatermark.ForeColor = Color.White;
-            btnApplyWatermark.Location = new Point(995, 84);
-            btnApplyWatermark.Name = "btnApplyWatermark";
-            btnApplyWatermark.Size = new Size(200, 50);
-            btnApplyWatermark.TabIndex = 4;
-            btnApplyWatermark.Text = "Apply Watermark";
-            btnApplyWatermark.UseVisualStyleBackColor = false;
-            // 
-            // btnSave
-            // 
-            btnSave.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnSave.BackColor = Color.FromArgb(76, 175, 80);
-            btnSave.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnSave.ForeColor = Color.White;
-            btnSave.Location = new Point(995, 760);
-            btnSave.Name = "btnSave";
-            btnSave.Size = new Size(200, 50);
-            btnSave.TabIndex = 5;
-            btnSave.Text = "Save Image";
-            btnSave.UseVisualStyleBackColor = false;
-            // 
-            // btnCancel
-            // 
-            btnCancel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnCancel.BackColor = Color.FromArgb(188, 188, 188);
-            btnCancel.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnCancel.ForeColor = Color.White;
-            btnCancel.Location = new Point(661, 760);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(200, 50);
-            btnCancel.TabIndex = 6;
-            btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = false;
-            // 
-            // btnAddInvisibleWatermark
-            // 
-            btnAddInvisibleWatermark.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            btnAddInvisibleWatermark.BackColor = Color.FromArgb(255, 87, 34);
-            btnAddInvisibleWatermark.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            btnAddInvisibleWatermark.ForeColor = Color.White;
-            btnAddInvisibleWatermark.Location = new Point(158, 290);
-            btnAddInvisibleWatermark.Name = "btnAddInvisibleWatermark";
-            btnAddInvisibleWatermark.Size = new Size(200, 50);
-            btnAddInvisibleWatermark.TabIndex = 7;
-            btnAddInvisibleWatermark.Text = "Add Invisible Watermark";
-            btnAddInvisibleWatermark.UseVisualStyleBackColor = false;
-            // 
-            // pictureBox
-            // 
-            pictureBox.BackColor = Color.Transparent;
-            pictureBox.Location = new Point(461, 167);
-            pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(941, 545);
-            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            pictureBox.TabIndex = 2;
-            pictureBox.TabStop = false;
-            // 
-            // txtWatermark
-            // 
-            txtWatermark.Font = new Font("Segoe UI", 12F);
-            txtWatermark.ForeColor = Color.DarkSlateGray;
-            txtWatermark.Location = new Point(755, 31);
-            txtWatermark.Name = "txtWatermark";
-            txtWatermark.PlaceholderText = "Enter watermark text here";
-            txtWatermark.Size = new Size(300, 29);
-            txtWatermark.TabIndex = 1;
-            // 
-            // txtAuthor
-            // 
-            txtAuthor.Font = new Font("Segoe UI", 12F);
-            txtAuthor.ForeColor = Color.DarkSlateGray;
-            txtAuthor.Location = new Point(143, 149);
-            txtAuthor.Name = "txtAuthor";
-            txtAuthor.PlaceholderText = "Enter author name";
-            txtAuthor.Size = new Size(228, 29);
-            txtAuthor.TabIndex = 8;
-            // 
-            // txtCopyright
-            // 
-            txtCopyright.Font = new Font("Segoe UI", 12F);
-            txtCopyright.ForeColor = Color.DarkSlateGray;
-            txtCopyright.Location = new Point(143, 231);
-            txtCopyright.Name = "txtCopyright";
-            txtCopyright.PlaceholderText = "Enter copyright information";
-            txtCopyright.Size = new Size(228, 29);
-            txtCopyright.TabIndex = 9;
-            // 
-            // lblTitle
-            // 
+            lblTitle.Text = "Watermark Image";
+            lblTitle.Font = new Font("Segoe UI", 24F, FontStyle.Bold);
+            lblTitle.ForeColor = Color.White;
+            lblTitle.Location = new Point(20, 20);
             lblTitle.AutoSize = true;
-            lblTitle.Font = new Font("Segoe UI", 18F, FontStyle.Bold);
-            lblTitle.ForeColor = Color.DarkSlateGray;
-            lblTitle.Location = new Point(755, 9);
-            lblTitle.Name = "lblTitle";
-            lblTitle.Size = new Size(0, 32);
-            lblTitle.TabIndex = 0;
-            // 
-            // lblAuthor
-            // 
-            lblAuthor.AutoSize = true;
-            lblAuthor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblAuthor.ForeColor = Color.DarkSlateGray;
-            lblAuthor.Location = new Point(215, 113);
-            lblAuthor.Name = "lblAuthor";
-            lblAuthor.Size = new Size(68, 21);
-            lblAuthor.TabIndex = 10;
+
+            // PictureBox
+            pictureBox = new PictureBox();
+            pictureBox.BackColor = Color.FromArgb(45, 45, 45);
+            pictureBox.Location = new Point(20, 70);
+            pictureBox.Size = new Size(1000, 600);
+            pictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+
+            // Upload Button
+            btnUpload = CreateButton("Upload Image", new Point(1050, 70), Color.FromArgb(33, 150, 243));
+
+            // Apply Watermark Button
+            btnApplyWatermark = CreateButton("Apply Watermark", new Point(1050, 140), Color.FromArgb(76, 175, 80));
+
+            // Save Button
+            btnSave = CreateButton("Save Image", new Point(1050, 210), Color.FromArgb(0, 188, 212));
+
+            // Cancel Button
+            btnCancel = CreateButton("Cancel", new Point(1050, 280), Color.FromArgb(188, 188, 188));
+
+            // Invisible Watermark Button
+            btnAddInvisibleWatermark = CreateButton("Add Invisible Watermark", new Point(1050, 350), Color.FromArgb(255, 87, 34));
+
+            // Watermark Textbox
+            txtWatermark = CreateTextBox(new Point(1050, 430), "Enter watermark text here");
+
+            // Author Label
+            lblAuthor = new Label();
             lblAuthor.Text = "Author:";
-            // 
-            // lblCopyright
-            // 
-            lblCopyright.AutoSize = true;
-            lblCopyright.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
-            lblCopyright.ForeColor = Color.DarkSlateGray;
-            lblCopyright.Location = new Point(193, 197);
-            lblCopyright.Name = "lblCopyright";
-            lblCopyright.Size = new Size(90, 21);
-            lblCopyright.TabIndex = 11;
+            lblAuthor.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblAuthor.ForeColor = Color.White;
+            lblAuthor.Location = new Point(1050, 480);
+            lblAuthor.AutoSize = true;
+
+            // Author Textbox
+            txtAuthor = CreateTextBox(new Point(1050, 510), "Enter author name");
+
+            // Copyright Label
+            lblCopyright = new Label();
             lblCopyright.Text = "Copyright:";
-            // 
-            // WatermarkForm
-            // 
-            BackColor = Color.FromArgb(24, 24, 24);
-            ClientSize = new Size(1747, 887);
-            Controls.Add(lblCopyright);
-            Controls.Add(lblAuthor);
-            Controls.Add(txtCopyright);
-            Controls.Add(txtAuthor);
-            Controls.Add(lblTitle);
-            Controls.Add(txtWatermark);
-            Controls.Add(pictureBox);
-            Controls.Add(btnUpload);
-            Controls.Add(btnApplyWatermark);
-            Controls.Add(btnAddInvisibleWatermark);
-            Controls.Add(btnSave);
-            Controls.Add(btnCancel);
-            FormBorderStyle = FormBorderStyle.FixedSingle;
-            MaximizeBox = false;
-            Name = "WatermarkForm";
-            Text = "Watermark Image";
-            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
-            ResumeLayout(false);
-            PerformLayout();
+            lblCopyright.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            lblCopyright.ForeColor = Color.White;
+            lblCopyright.Location = new Point(1050, 570);
+            lblCopyright.AutoSize = true;
+
+            // Copyright Textbox
+            txtCopyright = CreateTextBox(new Point(1050, 600), "Enter copyright information");
+
+            // Form Setup
+            this.ClientSize = new Size(1280, 720);
+            this.Controls.Add(lblTitle);
+            this.Controls.Add(pictureBox);
+            this.Controls.Add(btnUpload);
+            this.Controls.Add(btnApplyWatermark);
+            this.Controls.Add(btnSave);
+            this.Controls.Add(btnCancel);
+            this.Controls.Add(btnAddInvisibleWatermark);
+            this.Controls.Add(txtWatermark);
+            this.Controls.Add(lblAuthor);
+            this.Controls.Add(txtAuthor);
+            this.Controls.Add(lblCopyright);
+            this.Controls.Add(txtCopyright);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.Name = "WatermarkForm";
+            this.Text = "Watermark Image";
+        }
+
+        private Button CreateButton(string text, Point location, Color backColor)
+        {
+            Button button = new Button();
+            button.Text = text;
+            button.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
+            button.ForeColor = Color.White;
+            button.BackColor = backColor;
+            button.Size = new Size(200, 50);
+            button.FlatStyle = FlatStyle.Flat;
+            button.FlatAppearance.BorderSize = 0;
+            button.Location = location;
+            button.Cursor = Cursors.Hand;
+            return button;
+        }
+
+        private TextBox CreateTextBox(Point location, string placeholder)
+        {
+            TextBox textBox = new TextBox();
+            textBox.Font = new Font("Segoe UI", 12F);
+            textBox.ForeColor = Color.WhiteSmoke;
+            textBox.BackColor = Color.FromArgb(50, 50, 50);
+            textBox.Size = new Size(220, 30);
+            textBox.Location = location;
+            textBox.PlaceholderText = placeholder;
+            return textBox;
         }
     }
 }

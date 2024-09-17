@@ -37,10 +37,16 @@ namespace Matrise
                 {
                     try
                     {
-                        Image newImage = Image.FromFile(openFileDialog.FileName);
-                        pictureBox.Image?.Dispose(); // Dispose previous image if any
-                        selectedImage = newImage;
-                        pictureBox.Image = newImage;
+                        // Load and clone the image to avoid file locking issues
+                        using (Image newImage = Image.FromFile(openFileDialog.FileName))
+                        {
+                            selectedImage?.Dispose();  // Dispose previous image if any
+                            selectedImage = new Bitmap(newImage);  // Clone the image
+                        }
+
+                        // Update PictureBox with the new image
+                        pictureBox.Image?.Dispose();
+                        pictureBox.Image = new Bitmap(selectedImage);
                     }
                     catch (Exception ex)
                     {
@@ -49,7 +55,6 @@ namespace Matrise
                 }
             }
         }
-
 
         private async void BtnApplyWatermark_Click(object sender, EventArgs e)
         {
@@ -70,9 +75,12 @@ namespace Matrise
             {
                 Cursor = Cursors.WaitCursor;
 
-                Image watermarkedImage = await watermarkService.ApplyWatermarkAsync(selectedImage, watermarkText, 16, 0.5); // Adjust font size and opacity as needed
+                // Force the watermark to save as a valid format (PNG)
+                Image watermarkedImage = await watermarkService.ApplyWatermarkAsync(selectedImage, watermarkText, 16, 0.5); // Adjust font size and opacity
 
-                pictureBox.Image = watermarkedImage;
+                // Ensure image format remains valid
+                pictureBox.Image?.Dispose(); // Dispose the old image
+                pictureBox.Image = new Bitmap(watermarkedImage);  // Always use a Bitmap (it has proper encoding)
             }
             catch (Exception ex)
             {
@@ -83,6 +91,7 @@ namespace Matrise
                 Cursor = Cursors.Default;
             }
         }
+
 
         private void BtnSave_Click(object sender, EventArgs e)
         {
@@ -96,7 +105,7 @@ namespace Matrise
             {
                 saveFileDialog.Filter = "JPEG Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp";
                 saveFileDialog.Title = "Save Watermarked Image";
-                saveFileDialog.DefaultExt = "jpg";
+                saveFileDialog.DefaultExt = "png";
                 saveFileDialog.AddExtension = true;
 
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
@@ -104,59 +113,34 @@ namespace Matrise
                     try
                     {
                         string filePath = saveFileDialog.FileName;
+                        string extension = Path.GetExtension(filePath).ToLower();
 
-                        // Determine the image format based on file extension
-                        System.Drawing.Imaging.ImageFormat format;
-                        switch (Path.GetExtension(filePath).ToLower())
+                        // Always default to PNG to avoid encoder issues
+                        ImageFormat format = extension switch
                         {
-                            case ".png":
-                                format = System.Drawing.Imaging.ImageFormat.Png;
-                                break;
-                            case ".bmp":
-                                format = System.Drawing.Imaging.ImageFormat.Bmp;
-                                break;
-                            case ".jpg":
-                            case ".jpeg":
-                                format = System.Drawing.Imaging.ImageFormat.Jpeg;
-                                break;
-                            default:
-                                throw new ArgumentException("Unsupported file format.");
-                        }
+                            ".png" => ImageFormat.Png,
+                            ".bmp" => ImageFormat.Bmp,
+                            ".jpg" or ".jpeg" => ImageFormat.Jpeg,
+                            _ => throw new ArgumentException("Unsupported file format.")
+                        };
 
-                        // Save the image directly in the desired format
-                        // Added FileMode.Create to overwrite the file if it already exists
-                        using (FileStream fileStream = new FileStream(filePath, FileMode.Create, FileAccess.Write, FileShare.None))
-                        {
-                            pictureBox.Image.Save(fileStream, format);
-                        }
+                        // Save the image in a valid format
+                        pictureBox.Image.Save(filePath, format);
 
                         MessageBox.Show("Image saved successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
-                    catch (ArgumentException argEx)
-                    {
-                        MessageBox.Show($"File path or format error: {argEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (ExternalException extEx)
-                    {
-                        MessageBox.Show($"Image or file system error: {extEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                    catch (IOException ioEx)
-                    {
-                        MessageBox.Show($"I/O error: {ioEx.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
                     catch (Exception ex)
                     {
-                        MessageBox.Show($"Unexpected error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
             }
         }
 
 
-
         private void BtnCancel_Click(object sender, EventArgs e)
         {
-           
+            pictureBox.Image?.Dispose();  // Dispose current image
             pictureBox.Image = null;
         }
 
@@ -168,38 +152,59 @@ namespace Matrise
                 return;
             }
 
-            string author = "Author Name";
-            string copyright = "Copyright Info";
-            string description = "Image Description";
+            string author = txtAuthor.Text;
+            string copyright = txtCopyright.Text;
 
-            try
+            using (SaveFileDialog saveFileDialog = new SaveFileDialog())
             {
-                Cursor = Cursors.WaitCursor;
+                saveFileDialog.Filter = "JPEG Image|*.jpg|PNG Image|*.png|Bitmap Image|*.bmp";
+                saveFileDialog.Title = "Save Watermarked Image";
+                saveFileDialog.DefaultExt = "png";
+                saveFileDialog.AddExtension = true;
 
-                // Apply invisible watermark
-                await watermarkService.AddInvisibleWatermarkAsync(selectedImage, author, copyright, description);
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        Cursor = Cursors.WaitCursor;
 
-                // Save the image to check later
-                var tempFilePath = Path.Combine(Path.GetTempPath(), "watermarked_image.jpg");
-                pictureBox.Image.Save(tempFilePath);
+                        // Apply invisible watermark and save to the chosen path
+                        await watermarkService.AddInvisibleWatermarkAsync(
+                            selectedImage,
+                            author,
+                            copyright,
+                            "Image Description",
+                            saveFileDialog.FileName
+                        );
 
-                // Load the image again to verify metadata
-                string metadata = watermarkService.DecodeInvisibleWatermark(new Bitmap(tempFilePath));
+                        // Verify metadata by reloading the saved image
+                        var metadata = watermarkService.DecodeInvisibleWatermark(new Bitmap(saveFileDialog.FileName));
 
-                // Display metadata to verify
-                MessageBox.Show($"Metadata:\n{metadata}", "Metadata Verification", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                MessageBox.Show("Invisible watermark added and verified successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            finally
-            {
-                Cursor = Cursors.Default;
+                        MessageBox.Show($"Metadata:\n{metadata}", "Metadata Verification", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Invisible watermark added and verified successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    finally
+                    {
+                        Cursor = Cursors.Default;
+                    }
+                }
             }
         }
+
+
+        // Proper disposal of the form
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            selectedImage?.Dispose();  // Dispose selected image
+            base.Dispose(disposing);
+        }
     }
-    
 }

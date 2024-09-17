@@ -1,5 +1,6 @@
 ﻿using ImageMagick;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -52,25 +53,28 @@ public class WatermarkService
         }
     }
 
-
     public async Task<Image> ApplyWatermarkAsync(Image selectedImage, string watermarkText, int fontSize, double opacity)
     {
+        if (selectedImage == null)
+            throw new ArgumentNullException(nameof(selectedImage), "Selected image cannot be null.");
+
         using (var magickImage = new MagickImage(ImageToByteArray(selectedImage)))
         {
             AddWatermark(magickImage, watermarkText, fontSize, opacity);
-            return ByteArrayToImage(magickImage.ToByteArray());
+            return ByteArrayToImage(magickImage.ToByteArray(MagickFormat.Png));
         }
     }
-
 
     private byte[] ImageToByteArray(System.Drawing.Image image)
     {
         using (var ms = new MemoryStream())
         {
-            image.Save(ms, image.RawFormat);
+            // Force a valid format (PNG, as it supports transparency and is widely used)
+            image.Save(ms, ImageFormat.Png); // Default to PNG
             return ms.ToArray();
         }
     }
+
 
     private System.Drawing.Image ByteArrayToImage(byte[] byteArray)
     {
@@ -80,9 +84,11 @@ public class WatermarkService
         }
     }
 
-    // Method to embed invisible watermark (metadata)
-    public async Task AddInvisibleWatermarkAsync(Image selectedImage, string author, string copyright, string description)
+    public async Task AddInvisibleWatermarkAsync(Image selectedImage, string author, string copyright, string description, string savePath)
     {
+        if (string.IsNullOrEmpty(savePath))
+            throw new ArgumentNullException(nameof(savePath), "Save path cannot be null or empty.");
+
         using (var magickImage = new MagickImage(ImageToByteArray(selectedImage)))
         {
             // Adding metadata as invisible watermark
@@ -90,13 +96,14 @@ public class WatermarkService
             magickImage.SetAttribute("Copyright", copyright);
             magickImage.SetAttribute("Description", description);
 
-            // Save the image with metadata
+            // Save the image with metadata to the user-specified path
             var byteArray = magickImage.ToByteArray();
-            File.WriteAllBytes("path_to_save_image_with_metadata", byteArray);
+            File.WriteAllBytes(savePath, byteArray);
 
             await Task.CompletedTask;
         }
     }
+
 
     public string DecodeInvisibleWatermark(Image selectedImage)
     {
@@ -104,18 +111,15 @@ public class WatermarkService
         {
             using (var magickImage = new MagickImage(ImageToByteArray(selectedImage)))
             {
-                // Retrieve metadata attributes
                 string author = magickImage.GetAttribute("Author") ?? "N/A";
                 string copyright = magickImage.GetAttribute("Copyright") ?? "N/A";
                 string description = magickImage.GetAttribute("Description") ?? "N/A";
 
-                // Format the result
                 return $"Author: {author}, Copyright: {copyright}, Description: {description}";
             }
         }
         catch (Exception ex)
         {
-            // Handle exceptions
             return $"An error occurred while retrieving metadata: {ex.Message}";
         }
     }
